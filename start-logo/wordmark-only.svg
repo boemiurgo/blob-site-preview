@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-18 -18 1810 606" role="img" aria-label="BLOB"><g id="text-artwork" ><linearGradient id="text-rim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000000"/><stop offset="0.3" stop-color="#000000"/><stop offset="0.55" stop-color="#000000"/><stop offset="0.76" stop-color="#000000"/><stop offset="1" stop-color="#000000"/></linearGradient><g id="text-border" fill="#000000" stroke-linejoin="miter" stroke-width="25.34285714285714" stroke="#000000">
+    <g id="border-letter-b-first" transform="translate(0 0)">
+      <path id="border-b-first-stem-and-bowl" d="M0 0H63.36V190.07H190.07V253.43H126.71V316.79H63.36V380.14H126.71V506.86H316.79V443.5H380.14V570.21H0Z"/>
+      <path id="border-b-first-upper-right" d="M253.43 190.07H380.14V253.43H443.5V443.5H380.14V316.79H316.79V253.43H253.43Z"/>
+    </g>
+    <g id="border-letter-l" transform="translate(0 0)">
+      <path d="M570.21 0H633.57V506.86H696.93V570.21H570.21Z"/>
+    </g>
+    <g id="border-letter-o" transform="translate(0 0)">
+      <path id="border-o-upper-left" d="M823.64 190.07H1140.43V253.43H887V506.86H823.64Z"/>
+      <path id="border-o-lower-right" d="M1140.43 253.43H1203.79V506.86H1140.43V570.21H887V506.86H1077.07V443.5H1140.43Z"/>
+    </g>
+    <g id="border-letter-b-last" transform="translate(0 0)">
+      <path d="M1330.5 0H1393.86V190.07H1520.57V253.43H1457.21V316.79H1393.86V443.5H1457.21V506.86H1647.29V380.14H1710.64V316.79H1647.29V253.43H1583.93V190.07H1710.64V253.43H1774V443.5H1710.64V570.21H1330.5Z"/>
+    </g>
+  </g><g id="editable-wordmark" fill="#b8ff1a">
+    <g id="editable-letter-b-first" transform="translate(0 0)">
+      <path id="editable-b-first-stem-and-bowl" d="M0 0H63.36V190.07H190.07V253.43H126.71V316.79H63.36V380.14H126.71V506.86H316.79V443.5H380.14V570.21H0Z"/>
+      <path id="editable-b-first-upper-right" d="M253.43 190.07H380.14V253.43H443.5V443.5H380.14V316.79H316.79V253.43H253.43Z"/>
+    </g>
+    <g id="editable-letter-l" transform="translate(0 0)">
+      <path d="M570.21 0H633.57V506.86H696.93V570.21H570.21Z"/>
+    </g>
+    <g id="editable-letter-o" transform="translate(0 0)">
+      <path id="editable-o-upper-left" d="M823.64 190.07H1140.43V253.43H887V506.86H823.64Z"/>
+      <path id="editable-o-lower-right" d="M1140.43 253.43H1203.79V506.86H1140.43V570.21H887V506.86H1077.07V443.5H1140.43Z"/>
+    </g>
+    <g id="editable-letter-b-last" transform="translate(0 0)">
+      <path d="M1330.5 0H1393.86V190.07H1520.57V253.43H1457.21V316.79H1393.86V443.5H1457.21V506.86H1647.29V380.14H1710.64V316.79H1647.29V253.43H1583.93V190.07H1710.64V253.43H1774V443.5H1710.64V570.21H1330.5Z"/>
+    </g>
+  </g></g></svg>

@@ -1,0 +1,1471 @@
+/* BLOB Studio's pixel windows, physical controls, and glossy artwork. */
+@font-face{font-family:"BLOB Pixel";src:url('./assets/blob-pixel.ttf') format('truetype');font-display:swap}
+@font-face{font-family:"BLOB Grid";src:url('./assets/blob-grid.ttf') format('truetype');font-display:swap}
+:root{--paper:#f6f6f1;--paper-2:#eeefe8;--ink:#141412;--text:#232321;--muted:#5f6158;--desktop-bg:#f6f6f1;--window-body:#f6f6f1;--window-title:#4f4f4f;--signal:#b8ff1a;--green:#306230;--splash:#ff5a36;--px:"BLOB Pixel",Consolas,monospace;--taskbar-h:58px;--crt-margin:24px;--page-zoom:1;--container:1200px}
+html{height:auto;overflow-x:clip;scroll-behavior:smooth;scroll-padding-top:20px}
+body{height:auto;overflow:visible;font:16px/1.55 "Segoe UI",Arial,sans-serif;background:var(--paper);text-rendering:optimizeLegibility}
+.desktop{background:radial-gradient(#d4d6cb 1px,transparent 1.2px) 0 0/20px 20px;padding:24px 24px calc(var(--taskbar-h) + 30px)}
+#main{zoom:1;max-width:1400px;margin:auto}
+.crt{margin:0 0 30px;border:2px solid #000;box-shadow:5px 5px 0 #000;background:var(--paper);scroll-margin-top:22px}
+.crt:not(.crt--off){filter:none}
+.crt:not(.crt--off) *{text-shadow:none}
+body::after{opacity:.1;pointer-events:none}
+#top.crt{min-height:calc(100svh - var(--taskbar-h) - 78px)}
+#top.crt--minimized{min-height:0}
+.window__titlebar{min-height:38px;padding:5px 8px 5px 12px;font:11px/1.3 var(--px);letter-spacing:.025em}
+.window__icon{width:20px;height:20px;object-fit:contain;border-radius:0}
+.window__btn{width:26px;height:25px;background:#c0c0c0;box-shadow:inset 2px 2px #fff,inset -2px -2px #777}
+.window__body{border:0;padding:0;background:var(--paper)}
+.window--main .window__body{display:flex;align-items:stretch}
+.window--main .hero{padding:0;display:flex;flex-direction:column;flex:1}
+.window--main .hero__inner{flex:1}
+.container{width:calc(100% - 64px);max-width:var(--container);margin:auto}
+.brand-band{display:flex;align-items:center;gap:24px;padding:20px 32px;border-bottom:2px solid #000;background:#141412;color:var(--paper)}
+.brand-wordmark{font:42px/1 "BLOB Grid",var(--px);white-space:nowrap}
+.brand-caption{font-size:13px;margin-left:auto;color:#cccfc2}
+.brand-pixels{display:flex;align-self:stretch;margin:-20px -32px -20px auto;min-height:74px}
+.brand-pixels i{width:28px;background:var(--signal)}
+.brand-pixels i:nth-child(2){background:var(--splash)}
+.brand-pixels i:nth-child(3){background:#eeefe8}
+.hero__inner{grid-template-columns:1.05fr 1fr;gap:40px;padding-block:52px}
+.hero__copy{padding:0;text-align:left;background:none}
+.hero__kicker{display:inline-flex;align-items:center;gap:10px;color:var(--green);font:11px/1.6 var(--px);letter-spacing:.04em;margin:0 0 24px}
+.hero__kicker::before{content:"";width:8px;height:8px;background:var(--splash);box-shadow:2px 2px 0 #000;flex:none}
+.hero__title{font:clamp(42px,5vw,70px)/1.08 "BLOB Grid",var(--px);letter-spacing:-.015em;max-width:12ch;margin:0;text-transform:uppercase}
+.hero__subtitle{font-size:17px;line-height:1.65;max-width:36ch;margin:22px 0 0;color:var(--muted)}
+.hero__actions{justify-content:flex-start;gap:14px;margin-top:28px}
+.button,.chip{font:12px/1.4 var(--px);border:2px solid #000;min-height:44px;letter-spacing:0;background:#fff;color:#141412;box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #d2d3c8,3px 3px 0 #000;border-radius:0;transition:transform .12s,box-shadow .12s,background .12s;text-decoration:none}
+.button{padding:14px 18px}
+.button--primary{background:var(--signal);color:#000;box-shadow:inset 2px 2px #e0ff9c,inset -2px -2px #83ad25,3px 3px #000}
+.button:hover,.chip:hover{background:#eeefe8;transform:translateY(-1px)}
+.button--primary:hover{background:#c7ff50}
+.button:active,.chip:active{transform:translate(3px,3px);box-shadow:inset 2px 2px #828578}
+.button:disabled{opacity:.55;cursor:wait}
+.hero__visual{display:block;border:2px solid #000;box-shadow:4px 4px #000;align-self:stretch;background:var(--paper-2);min-width:0;position:relative;justify-items:stretch}
+.art-label{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:2px solid #000;background:#c0c0c0;box-shadow:inset 2px 2px #fff;font:10px/1.4 var(--px)}
+.hero-logo{width:100%;height:calc(100% - 38px);min-height:290px;aspect-ratio:auto;border-radius:0;padding:18px;background:repeating-conic-gradient(#e4e6dc 0% 25%,#eeefe8 0% 50%) 50%/28px 28px;overflow:hidden}
+.hero-logo__img{width:100%;height:auto;aspect-ratio:1.85;object-fit:contain;filter:drop-shadow(0 14px 7px #14141224);animation:logo-float 7s ease-in-out infinite}
+@keyframes logo-float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(0deg)}}
+.format-strip{display:flex;border-top:2px solid #000;background:#eeefe8;min-height:72px}
+.format-strip>span{display:flex;align-items:center;gap:12px;padding:14px 24px;border-right:2px solid #000;font:10px/1.4 var(--px)}
+.format-strip b{font:30px/1 "BLOB Grid",var(--px)}
+.format-strip .format-strip__end{margin-left:auto;border:0;color:var(--green);font-size:9px;text-align:right}
+.prices,.quote{padding:38px 0 42px}
+.section-head{margin-bottom:28px;gap:12px}
+.section-title{font:38px/1.1 "BLOB Grid",var(--px);letter-spacing:0}
+.section-subtitle{font-size:16px;color:var(--muted)}
+.prices-workspace{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px;align-items:start}
+.prices__grid{grid-template-columns:1fr 1fr;gap:16px}
+.prices__panel{padding:20px;border:2px solid #000;background:#fff;box-shadow:3px 3px #000;min-width:0}
+.prices__panel--qty,.prices__panel--colors{grid-column:1/-1}
+.panel-title,.details-title{font:12px/1.5 var(--px);letter-spacing:.02em}
+.panel-title::before{content:"";display:inline-block;width:7px;height:7px;background:var(--green);margin-right:9px;box-shadow:1px 1px #000}
+.chips{gap:9px;flex-wrap:wrap}
+.chip{padding:10px 12px;font-size:11px}
+.chip.is-active{background:var(--green);color:white;box-shadow:inset 2px 2px #183c1b,inset -2px -2px #739c5b;transform:translate(1px,1px)}
+.prices__chip-group-label{font-size:12px;color:var(--muted);margin:20px 0 10px}
+.prices__sleeve-hint,.prices__sleeve-type-hint,.prices__color-hint{font-size:13px;line-height:1.65;color:var(--muted);margin:16px 0 0}
+.record-preview{margin:0;border:2px solid #000;background:var(--paper-2);box-shadow:3px 3px #000;position:sticky;top:20px}
+.record-preview__stage{display:grid;place-items:center;aspect-ratio:1;padding:14px;background:radial-gradient(#c9cdbf 1px,transparent 1px) 0 0/12px 12px}
+.record-preview img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;transition:width .2s;filter:drop-shadow(3px 7px 3px #0003)}
+.record-preview img[data-format="7"]{width:72%}
+.record-preview img[data-format="single"]{width:88%}
+.record-preview figcaption{display:grid;gap:8px;border-top:2px solid #000;padding:16px;background:white}
+.record-preview figcaption strong{font:11px/1.5 var(--px)}
+.record-preview figcaption span{font-size:12px;color:var(--muted)}
+.prices__details{margin-top:24px}
+.details-card{border:2px solid #000;padding:20px;background:#eeefe8;box-shadow:3px 3px #000}
+.details-card__head{margin:0 0 16px;padding:0 0 16px;border-bottom:1px solid #b4b6aa;background:none;align-items:center;flex-wrap:wrap}
+.details-badge{font:12px/1.5 "Segoe UI",sans-serif;border:1px solid #a1a495;background:var(--paper);padding:5px 10px;letter-spacing:0}
+.details-table{grid-template-columns:1fr 1fr 1.4fr;gap:14px;margin:0}
+.details-row{grid-template-columns:1fr;border:1px solid #acb19e;gap:8px;padding:14px 18px}
+.details-cell--label{font-size:12px;font-weight:400}
+.details-cell--value{font:28px/1.1 "BLOB Grid",var(--px);letter-spacing:0}
+.details-card .details-table .details-row.details-row--total{background:var(--signal);border:2px solid #000}
+.details-note{font:13px/1.7 "Segoe UI",Arial,sans-serif}
+.form{border:2px solid #000;box-shadow:4px 4px #000}
+.form--quote .form__section{padding:24px}
+.form--quote .form__section--muted,.form--quote .form__section--warm{border-top:2px solid #000;background:#eeefe8}
+.form__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.field{min-width:0;gap:9px}
+.field__label{font:11px/1.5 var(--px);letter-spacing:0;color:#33352f}
+.field__input,.field__input[type],textarea.field__input,select.field__input{font:16px/1.4 "Segoe UI",Arial,sans-serif;border:2px solid #000;padding:12px;background-color:#fff;box-shadow:inset 2px 2px #d1d3c7;min-height:46px;letter-spacing:0}
+select.field__input{padding-right:40px}
+.form__actions{margin-top:22px}
+.contact-cards{gap:16px}
+.contact-card{border:2px solid #000;box-shadow:3px 3px #000;padding:18px;background:#fff}
+.contact-card__label{font:10px/1.4 var(--px)}
+.contact-card__value{font:15px/1.4 "Segoe UI",sans-serif;overflow-wrap:anywhere}
+.taskbar{height:var(--taskbar-h);gap:8px;padding:8px 12px;background:#c0c0c0;border-top:2px solid #000;box-shadow:inset 0 2px #fff;z-index:1001;font:10px/1.4 var(--px)}
+.taskbar__start,.taskbar__task,.taskbar__infos,.taskbar__lang-btn{height:38px;border:2px solid #000;background:#eeefe8;color:#000;box-shadow:inset 2px 2px #fff,inset -2px -2px #888,2px 2px #000;font:10px/1.3 var(--px);padding:0 12px;white-space:nowrap}
+.taskbar__start{background:var(--signal);min-width:100px}
+.taskbar__task:hover,.taskbar__task--active,.taskbar__start.is-active,.taskbar__infos:hover,.taskbar__infos[aria-expanded="true"],.taskbar__lang-btn.is-active,.taskbar__lang-btn:hover{background:var(--green);color:white;box-shadow:inset 2px 2px #183c1b,inset -2px -2px #739c5b}
+.taskbar__tasks{gap:8px;flex:1;min-width:0}
+.taskbar__lang{gap:4px}
+.taskbar__lang-btn{padding:0 8px;font-size:9px}
+.taskbar__crt{padding:5px;border:1px solid #777;background:#bbb}
+.taskbar__crt-toggle{width:22px;height:22px}
+.taskbar__logo{width:23px;height:23px;border-radius:0}
+.start-panel{border:2px solid #000;box-shadow:4px 4px #000;background:var(--paper);max-height:calc(100dvh - var(--taskbar-h) - 28px);overflow:auto}
+.start-panel__titlebar{min-height:36px;font:11px/1.4 var(--px);padding:6px 10px;border-bottom:2px solid #000}
+.start-panel__body{padding:22px;background:var(--paper)}
+.start-panel__text{font:16px/1.8 "Segoe UI",Arial,sans-serif}
+.start-panel__close{width:25px;height:24px;flex:none}
+.start-menu__item{font:12px/1.4 var(--px);padding:12px;min-height:44px;color:#000;background:#eeefe8}
+.start-menu__item:hover{background:var(--signal)}
+#footer-window{box-shadow:none;border:0;background:transparent;margin-bottom:0}
+#footer-window .window__body{border:0;background:transparent}
+#footer-window .footer{padding:8px 0}
+.footer__text,.footer__link{font:12px/1.5 "Segoe UI",sans-serif}
+.footer__link{border-bottom:1px solid #555}
+:is(a,button,input,select,textarea):focus-visible{outline:3px solid #306230;outline-offset:4px}
+.taskbar :focus-visible,.window__titlebar :focus-visible{outline-color:var(--splash)}
+.window--minimized>.window__body{display:none}
+@media(min-width:1450px){.hero__inner{padding-block:70px}}
+@media(max-width:1100px){.brand-caption{display:none}.prices-workspace{grid-template-columns:minmax(0,1fr) 230px}.hero__inner{gap:24px}.hero__title{font-size:52px}.taskbar__start,.taskbar__task,.taskbar__infos{padding:0 8px;font-size:9px}.format-strip>span{padding:14px 18px}.format-strip .format-strip__end{font-size:8px}}
+@media(max-width:900px){.desktop{padding:16px 16px calc(var(--taskbar-h) + 24px)}.container{width:calc(100% - 40px)}.brand-band{padding:20px}.brand-pixels{margin-right:-20px}.brand-wordmark{font-size:34px}.hero__inner{grid-template-columns:1fr 1fr;padding-block:36px}.hero__title{font-size:42px}.hero__kicker{font-size:9px}.hero__subtitle{font-size:15px}.hero__actions .button{font-size:10px;padding:12px}.hero-logo{min-height:240px}.format-strip .format-strip__end{display:none}.format-strip>span{flex:1}.prices-workspace{grid-template-columns:1fr}.record-preview{position:static;display:grid;grid-template-columns:200px 1fr;grid-template-rows:auto 1fr}.record-preview .art-label{grid-column:1/-1}.record-preview figcaption{border-top:0;border-left:2px solid #000;align-content:center}.contact-cards{grid-template-columns:1fr 1fr}.contact-card:first-child{grid-column:1/-1}.taskbar__flag{display:none}.taskbar{gap:5px;padding-inline:7px}.taskbar__tasks{gap:5px}.taskbar__lang-btn{padding:0 6px}}
+@media(max-width:640px){:root{--crt-margin:12px;--taskbar-h:60px}.desktop{padding:12px 12px calc(var(--taskbar-h) + 22px)}.crt{margin-bottom:24px;box-shadow:3px 3px #000}.window__titlebar{font-size:9px}.window__title{gap:6px}.window__controls{gap:3px}.window__btn{width:25px}.container{width:calc(100% - 32px)}.brand-wordmark{font-size:30px}.brand-band{padding:18px 16px}.brand-pixels{margin:-18px -16px -18px auto;min-height:60px}.brand-pixels i{width:16px}.hero__inner{grid-template-columns:1fr;gap:28px;padding-block:28px}.hero__title{font-size:clamp(40px,11vw,60px);max-width:13ch}.hero__kicker{margin-bottom:18px}.hero__subtitle{max-width:36ch}.hero__visual{min-height:0}.hero-logo{min-height:200px;height:auto;aspect-ratio:1.8;padding:16px}.hero__actions{gap:10px;margin-top:22px}.hero__actions .button{flex:1;min-width:105px}.format-strip>span{padding:12px 9px;font-size:8px;flex-wrap:wrap;gap:6px}.format-strip b{font-size:24px}.format-strip>span:last-of-type{border:0}.prices,.quote{padding:28px 0}.section-title{font-size:32px}.section-subtitle{font-size:15px}.prices__grid{grid-template-columns:1fr}.prices__panel{padding:16px}.prices__panel--qty,.prices__panel--colors{grid-column:auto}.chip{font-size:10px;min-height:42px}.record-preview{grid-template-columns:140px 1fr}.record-preview figcaption{padding:12px}.record-preview figcaption strong{font-size:10px}.details-table{grid-template-columns:1fr 1fr}.details-row--total{grid-column:1/-1;grid-template-columns:1fr auto;align-items:center}.details-row{padding:12px}.details-cell--value{font-size:25px}.details-card{padding:16px}.details-badge{font-size:11px}.form__grid{grid-template-columns:1fr;gap:18px}.form--quote .form__section{padding:18px 16px}.contact-cards{grid-template-columns:1fr}.contact-card:first-child{grid-column:auto}.taskbar__tasks,.taskbar__infos{display:none}.taskbar__start{font-size:11px;min-width:108px}.taskbar__lang-btn{padding:0 10px;font-size:10px}.taskbar__flag{display:inline-block}.taskbar__crt{margin-left:auto}.taskbar{gap:7px}.footer__inner,#footer-window .footer__inner{flex-wrap:wrap;gap:6px 16px}.start-panel__body{padding:18px}.start-panel__text{font-size:15px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-logo__img{animation:none}.button,.chip,.record-preview img{transition:none}.button:hover,.button:active,.chip:hover,.chip:active{transform:none}}
+@media(max-width:900px){#top.crt{min-height:0}}
+@media(max-width:640px){.brand-wordmark{font-size:clamp(22px,6.6vw,30px)}}
+
+/* Classic BLOB composition: compact windows, centered introduction and
+   three pricing panels. Keep the Studio controls and original behavior. */
+:root {
+  --paper:#fff;
+  --paper-2:#f3f4f1;
+  --desktop-bg:#b8ff1a;
+  --window-body:#fff;
+  --container:1100px;
+  --crt-margin:12px;
+  --taskbar-h:46px;
+}
+.desktop { background:var(--desktop-bg); padding:12px 12px calc(var(--taskbar-h) + 18px); }
+#main { max-width:none; }
+.crt { margin:0 0 16px; border:2px solid #343630; box-shadow:2px 2px 0 #0005; scroll-margin-top:12px; }
+.window__titlebar { min-height:32px; padding:4px 7px; font-size:10px; }
+.window__body { padding:12px; background:#fff; }
+.window__btn { width:23px; height:22px; }
+#top.crt { min-height:calc(100svh - var(--taskbar-h) - 40px); }
+.window--main .window__body { align-items:center; justify-content:center; }
+.window--main .hero { display:block; flex:initial; padding:24px 0; }
+.container { width:calc(100% - 40px); max-width:1100px; }
+.hero__inner { grid-template-columns:1.3fr .7fr; gap:36px; padding:0; }
+.hero__copy { text-align:center; padding:26px 18px; }
+.hero__kicker { justify-content:center; font-size:10px; margin:0 0 18px; color:#58624d; }
+.hero__kicker::before { display:none; }
+.hero__title { font:clamp(32px,3.25vw,46px)/1.22 "BLOB Grid",var(--px); text-transform:uppercase; letter-spacing:0; text-wrap:balance; max-width:20ch; margin:0 auto; }
+.hero__subtitle { max-width:43ch; font-size:15px; line-height:1.7; margin:20px auto 0; }
+.hero__actions { justify-content:center; gap:12px; margin-top:24px; }
+.hero__visual { display:flex; justify-content:center; align-items:center; align-self:center; border:0; box-shadow:none; background:none; }
+.hero-logo { width:min(360px,100%); height:auto; min-height:0; aspect-ratio:1; padding:12px; background:none; overflow:visible; }
+.hero-logo__img { width:100%; height:auto; filter:drop-shadow(0 12px 9px #14141220); }
+.hero-logo__img[src$="blob-flat-wordmark.svg"] { aspect-ratio:600/490; filter:none; animation:none; }
+.hero-logo:has(.hero-logo__img[src$="blob-flat-logo.svg"]) { display:grid; place-items:center; }
+.hero-logo__img[src$="blob-flat-logo.svg"] { aspect-ratio:600/252; filter:none; animation:none; }
+.button { font-size:11px; padding:12px 16px; min-height:42px; box-shadow:inset 1px 1px #fff,inset -1px -1px #c5c7bc,2px 2px #141412; }
+.button--primary { background:#171a15; color:#fff; box-shadow:inset 1px 1px #62665a,inset -1px -1px #000,2px 2px #141412; }
+.button--primary:hover { background:#306230; }
+.prices,.quote { padding:30px 0; }
+.section-head { gap:8px; margin-bottom:22px; }
+.section-title { font:750 28px/1.2 "Segoe UI",Arial,sans-serif; letter-spacing:-.025em; text-transform:none; }
+.section-subtitle { font-size:14px; }
+.prices-workspace { display:block; }
+.prices__grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.prices__panel { border:1px solid #7b8173; padding:16px; box-shadow:2px 2px 0 #0002; }
+.prices__panel--record { background:#f0f5f9; }
+.prices__panel--sleeve { background:#f5f1f8; }
+.prices__panel--qty { background:#eff7f0; grid-column:auto; }
+.prices__panel--colors { background:#faf6ed; grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1fr) 150px; column-gap:24px; align-items:start; }
+.prices__panel--colors>.panel-title,.prices__panel--colors>.chips,.prices__panel--colors>.prices__color-hint { grid-column:1; }
+.panel-title,.details-title { font-size:11px; }
+.panel-title::before { display:none; }
+.chip { font-size:10px; padding:9px 10px; min-height:38px; box-shadow:inset 1px 1px #fff,inset -1px -1px #c7cabc,2px 2px #141412; }
+.prices__sleeve-hint,.prices__sleeve-type-hint,.prices__color-hint { font-size:12px; }
+.record-preview { position:static; grid-column:2; grid-row:1/4; display:block; border:0; background:none; box-shadow:none; margin:0; }
+.record-preview .art-label { display:none; }
+.record-preview__stage { width:110px; max-width:100%; margin:auto; padding:4px 8px; background:none; }
+.record-preview figcaption { border:0; background:none; padding:5px 0 0; gap:5px; text-align:center; }
+.record-preview figcaption strong { font:600 11px/1.4 "Segoe UI",Arial,sans-serif; }
+.record-preview figcaption span { font-size:10px; line-height:1.4; }
+.prices__details { margin-top:16px; }
+.details-card { padding:16px; border:1px solid #7b8173; background:#f1f3ed; box-shadow:2px 2px #0002; }
+.details-card__head { margin:0 0 12px; padding:0 0 12px; }
+.details-table { grid-template-columns:1fr; gap:8px; }
+.details-row { display:grid; grid-template-columns:1fr auto; align-items:center; padding:10px 14px; gap:16px; }
+.details-cell--label { font-size:13px; }
+.details-cell--value { font:650 18px/1.3 "Segoe UI",Arial,sans-serif; font-variant-numeric:tabular-nums; }
+.details-row--total { grid-column:auto; }
+.details-card .details-table .details-row.details-row--total { background:#e5f0d6; border:1px solid #71855f; }
+.details-row--total .details-cell--value { font-size:23px; }
+.details-note { font-size:12px; }
+.form { border:1px solid #7b8173; box-shadow:2px 2px #0002; }
+.form--quote .form__section { padding:20px; }
+.form--quote .form__section--muted,.form--quote .form__section--warm { border-top:1px solid #c2c7ba; }
+.form__grid { gap:18px; }
+.field__label { font-size:10px; }
+.field__input,.field__input[type],textarea.field__input,select.field__input { border:1px solid #737b69; box-shadow:inset 1px 1px #ddd; font-size:15px; }
+.taskbar { height:var(--taskbar-h); background:linear-gradient(#42463e,#252821); border-top:1px solid #10120e; box-shadow:inset 0 1px #89917f; padding:6px 8px; }
+.taskbar__start,.taskbar__task,.taskbar__infos,.taskbar__lang-btn { height:32px; background:linear-gradient(#555b4e,#353a2f); color:#fff; border:1px solid #111; box-shadow:inset 1px 1px #8c9384,inset -1px -1px #191d15; font-size:9px; }
+.taskbar__start { min-width:90px; background:var(--signal); color:#141412; }
+.taskbar__task:hover,.taskbar__task--active,.taskbar__start.is-active,.taskbar__infos:hover,.taskbar__infos[aria-expanded="true"],.taskbar__lang-btn.is-active { background:#306230; color:white; }
+.taskbar__crt { background:#454b3e; border-color:#141812; padding:3px; }
+.taskbar__crt-toggle { width:20px; height:20px; }
+.taskbar__logo { width:20px; height:20px; }
+#footer-window .window__body { padding:4px 8px; }
+@media(max-width:920px) {
+  .hero__inner { grid-template-columns:1fr; gap:8px; }
+  #top.crt { min-height:calc(100svh - var(--taskbar-h) - 40px); }
+  .hero__copy { padding:20px 12px 0; }
+  .hero-logo { width:min(260px,100%); aspect-ratio:1.6; margin:14px auto; }
+  .hero__title { font-size:38px; }
+  .prices__grid { grid-template-columns:1fr; }
+  .prices__panel--colors { grid-column:auto; }
+  .form__grid { grid-template-columns:1fr; }
+}
+@media(max-width:640px) {
+  :root { --taskbar-h:50px; }
+  .desktop { padding:8px 8px calc(var(--taskbar-h) + 16px); }
+  .window__body { padding:8px; }
+  .container { width:calc(100% - 16px); }
+  .window__titlebar { font-size:9px; }
+  .hero__title { font-size:clamp(29px,7.8vw,38px); max-width:18ch; }
+  .hero__kicker { font-size:9px; }
+  .hero__subtitle { font-size:14px; }
+  .hero__actions .button { flex:initial; min-width:0; font-size:9px; padding:12px; }
+  .hero-logo { width:220px; }
+  .section-title { font-size:25px; }
+  .prices,.quote { padding:22px 0; }
+  .prices__panel--colors { grid-template-columns:minmax(0,1fr) 94px; column-gap:12px; }
+  .prices__panel--colors>.chips { grid-column:1/-1; }
+  .prices__panel--colors>.prices__color-hint { grid-column:1/-1; }
+  .record-preview { grid-row:1; }
+  .record-preview__stage { padding:0 10px; }
+  .record-preview figcaption { display:grid; }
+  .record-preview figcaption strong { display:none; }
+  .record-preview figcaption span { font-size:9px; }
+  .prices__panel--colors>.panel-title { align-self:center; }
+  .details-row,.details-row--total { grid-template-columns:1fr auto; grid-column:auto; }
+  .form--quote .form__section { padding:16px; }
+  .taskbar__start { min-width:92px; font-size:10px; }
+  .taskbar__lang-btn { font-size:9px; padding-inline:8px; }
+}
+
+/* Compact pricing desk: all choices and the result stay together. */
+#pricesColorPanel .chip.is-hidden { display:none; }
+.hero__kicker { color:var(--green); letter-spacing:.08em; }
+.hero__subtitle { text-wrap:balance; }
+#prices .section-title { font:28px/1.2 "BLOB Grid",var(--px); letter-spacing:0; }
+#prices .prices__panel { border:1px solid #69745e; box-shadow:inset 1px 1px #fff, inset -1px -1px #d0d5c9, 3px 3px #242b2026; }
+#prices .panel-title { color:#273d20; }
+#prices .chip.is-active { outline:1px solid #141412; outline-offset:2px; }
+#prices .details-card { border:1px solid #69745e; box-shadow:inset 1px 1px #fff,3px 3px #242b2026; }
+@media(min-width:921px) {
+  #prices .prices { padding:8px 0; }
+  #prices .section-head { display:flex; flex-direction:row; align-items:baseline; gap:20px; margin-bottom:18px; }
+  #prices .section-subtitle { margin:0; }
+  #prices .prices__grid { gap:12px; grid-template-columns:1fr 1fr 1.12fr; }
+  #prices .prices__panel { padding:10px 16px; }
+  #prices .panel-title { margin-bottom:8px; }
+  #prices .chips { gap:8px; }
+  #prices .chip { min-height:36px; padding:8px 10px; }
+  #prices .prices__chip-group-label { margin:10px 0 6px; font-size:11px; }
+  #prices .prices__sleeve-hint,#prices .prices__sleeve-type-hint,#prices .prices__color-hint { margin-top:12px; line-height:1.5; }
+  #prices .prices__panel--colors { grid-template-columns:minmax(0,1fr) 140px; column-gap:18px; align-items:center; }
+  #prices .record-preview__stage { width:60px; padding:0; }
+  #prices .record-preview figcaption { padding-top:4px; gap:2px; }
+  #prices .prices__details { margin-top:14px; }
+  #prices .details-card { padding:12px 16px; }
+  #prices .details-card__head { margin-bottom:8px; padding-bottom:8px; }
+  #prices .details-table { grid-template-columns:1fr 1fr 1.2fr; gap:10px; }
+  #prices .details-row { grid-template-columns:1fr auto; gap:12px; padding:12px 14px; background:#fff; }
+  #prices .details-cell--value { font-size:23px; }
+  #prices .details-row--total .details-cell--value { font-size:28px; }
+  #prices .details-note { margin:10px 0 0; line-height:1.45; }
+  #prices .hero__actions { margin-top:12px; }
+}
+#prices .details-card .details-table .details-row.details-row--total { background:#e5f0d6; border-color:#71855f; }
+
+/* Classic Windows taskbar: raised applications and a recessed utility tray. */
+:root { --taskbar-h:52px; }
+.taskbar { gap:6px; padding:7px 8px; background:#c3c7c5; border-top:1px solid #fafffb; box-shadow:inset 0 1px #fff,0 -1px #727a73; }
+.taskbar__start,.taskbar__task,.taskbar__infos,.taskbar__lang-btn {
+  height:36px; gap:8px; padding:0 12px; border:1px solid; border-color:#fff #555d57 #555d57 #fff;
+  background:linear-gradient(#e4e7e3,#cbd0c9); color:#182019;
+  box-shadow:inset 1px 1px #f9fcf6,inset -1px -1px #969e95;
+  font:600 13px/1 "Segoe UI",Tahoma,Arial,sans-serif; border-radius:0;
+}
+.taskbar__start { min-width:98px; font-size:15px; font-weight:800; background:linear-gradient(#e5f0d5,#bbcda7); }
+.taskbar__logo { width:28px; height:28px; object-fit:contain; border-radius:0; }
+.taskbar__icon { width:23px; height:23px; flex:none; stroke:#344138; stroke-width:1.25; stroke-linejoin:round; stroke-linecap:round; fill:none; filter:drop-shadow(1px 1px 0 #fff8); }
+.taskbar__tasks { display:flex; gap:5px; padding-left:9px; margin-left:3px; border-left:1px solid #8a938a; box-shadow:-1px 0 #eef2eb; }
+.taskbar__task { justify-content:flex-start; min-width:124px; }
+.taskbar__start:hover,.taskbar__task:hover,.taskbar__infos:hover,.taskbar__lang-btn:hover { background:#e9eee5; color:#182019; }
+.taskbar__task--active,.taskbar__start.is-active,.taskbar__infos[aria-expanded="true"],.taskbar__lang-btn.is-active,
+.taskbar__start:active,.taskbar__task:active,.taskbar__infos:active,.taskbar__lang-btn:active {
+  background:#dce5d6; color:#182019; border-color:#596451 #fff #fff #596451; box-shadow:inset 1px 1px #9ba693;
+}
+.taskbar__task--active { font-weight:800; }
+.taskbar__crt { margin-left:auto; padding:5px 7px; background:#bcc3b8; border:1px solid; border-color:#88927f #f6f9f2 #f6f9f2 #88927f; }
+.taskbar__crt-toggle { width:23px; height:23px; }
+.taskbar__lang { gap:3px; }
+.taskbar__lang-btn { padding:0 7px; font-size:11px; gap:5px; }
+.taskbar :focus-visible { outline:2px dotted #182019; outline-offset:-5px; }
+@media (min-width:641px) and (max-width:1050px) {
+  .taskbar__infos { width:36px; padding:0; }
+  .taskbar__infos>span { display:none; }
+  .taskbar__task { min-width:104px; padding-inline:9px; }
+}
+@media (max-width:640px) {
+  :root { --taskbar-h:88px; }
+  .taskbar { display:grid; grid-template-columns:auto 1fr auto; grid-template-rows:36px 28px; gap:7px 6px; padding:7px 8px 9px; }
+  .taskbar__start { grid-column:1; grid-row:1; min-width:86px; padding:0 8px; }
+  .taskbar__tasks { grid-column:2/4; grid-row:1; display:flex; gap:5px; padding-left:6px; margin-left:0; }
+  .taskbar__task { flex:1; min-width:0; padding:0 7px; gap:5px; font-size:12px; }
+  .taskbar__icon { width:20px; height:20px; }
+  .taskbar__infos { display:none; }
+  .taskbar__crt { grid-column:1; grid-row:2; margin:0; justify-self:start; padding:2px 6px; }
+  .taskbar__crt-toggle { height:20px; width:23px; }
+  .taskbar__lang { grid-column:3; grid-row:2; }
+  .taskbar__lang-btn { height:27px; padding:0 8px; }
+}
+
+/* Match the original bloborg composition while retaining v2 controls and artwork. */
+:root { --px:"Press Start 2P","BLOB Pixel",Consolas,monospace; --ink:#000; --text:#000; --muted:#444; --paper-2:#f0f0f0; }
+body { font:12px/1.7 var(--px); text-rendering:geometricPrecision; }
+.desktop { padding:10px 10px calc(var(--taskbar-h) + 10px); }
+.crt { border:2px solid; border-color:#fff #2d2d2d #2d2d2d #fff; background:#c0c0c0; margin-bottom:12px; box-shadow:2px 2px #0006; }
+.window__titlebar { min-height:27px; font:700 9px/1.5 var(--px); letter-spacing:.04em; }
+.window__body { border:2px solid; border-color:#808080 #fff #fff #808080; padding:10px; }
+.container { width:calc(100% - 32px); max-width:880px; }
+#top.crt { min-height:calc(100svh - var(--taskbar-h) - 24px); }
+.hero__inner { grid-template-columns:1.3fr .7fr; gap:28px; }
+.hero__copy { padding:21px 22px; background:transparent; }
+.hero__kicker { font:9px/1.6 var(--px); color:#444; letter-spacing:.06em; margin-bottom:12px; }
+.hero__title { font:700 clamp(27px,2.9vw,37px)/1.18 var(--px); text-transform:none; letter-spacing:.01em; max-width:18ch; text-wrap:initial; }
+.hero__subtitle { font:10.5px/1.75 var(--px); max-width:47ch; margin:16px auto 0; color:#444; text-wrap:initial; }
+.hero__actions { margin-top:20px; }
+.hero-logo { width:min(310px,100%); padding:4%; }
+.button { font:700 10px/1.5 var(--px); padding:12px 14px; }
+.button--primary { background:#111; }
+.section-title,#prices .section-title { font:700 16px/1.5 var(--px); text-transform:uppercase; letter-spacing:.04em; }
+.section-subtitle { font:12px/1.7 var(--px); max-width:70ch; }
+.prices,.quote,#prices .prices { padding:32px 0; }
+#prices .section-head,.section-head { display:grid; gap:8px; margin-bottom:16px; }
+#prices .prices__grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+#prices .prices__panel { border:3px solid #000; box-shadow:none; padding:11px; }
+.prices__panel--record { background:var(--prices-panel-record); }
+.prices__panel--sleeve { background:var(--prices-panel-sleeve); }
+.prices__panel--qty { background:var(--prices-panel-qty); }
+.prices__panel--colors { background:var(--prices-panel-colors); }
+.panel-title,#prices .panel-title { font:700 9px/1.6 var(--px); color:#333; margin-bottom:10px; letter-spacing:.04em; }
+#prices .chips { gap:7px; }
+.chip,#prices .chip { font:700 9px/1.5 var(--px); padding:7px 8px; min-height:32px; }
+.chip.is-active { background:#171a15; box-shadow:inset 2px 2px #000,inset -2px -2px #777; }
+#prices .chip.is-active { outline:none; }
+#prices .prices__chip-group-label { font:700 8px/1.6 var(--px); margin:12px 0 8px; }
+#prices .prices__sleeve-hint,#prices .prices__sleeve-type-hint,#prices .prices__color-hint { font:9px/1.7 var(--px); margin-top:12px; color:#444; }
+#prices .prices__panel--colors { grid-template-columns:minmax(0,1fr) 120px; gap:0 16px; }
+#prices .record-preview__stage { width:94px; padding:0; }
+.record-preview figcaption strong { font:8px/1.6 var(--px); }
+.record-preview figcaption span { font:10px/1.4 "Segoe UI",Arial,sans-serif; }
+#prices .details-card { padding:12px; background:#f0f0f0; border:3px solid #000; box-shadow:none; }
+#prices .details-card__head { margin:-12px -12px 10px; padding:11px 12px; border-bottom:3px solid #000; gap:10px; }
+.details-title { font:700 11px/1.6 var(--px); }
+.details-badge { font:8px/1.6 var(--px); padding:7px; border:3px solid #000; background:#fff; }
+#prices .details-table { grid-template-columns:1fr; gap:7px; }
+#prices .details-row { grid-template-columns:1fr auto; border:3px solid #000; padding:8px 10px; gap:12px; }
+.details-cell--label,#prices .details-cell--value,#prices .details-row--total .details-cell--value { font:700 9px/1.6 var(--px); letter-spacing:.02em; }
+#prices .details-card .details-table .details-row.details-row--total { background:#fff; border-color:#000; }
+#prices .details-note { font:10px/1.7 var(--px); margin-top:10px; }
+.form { border:3px solid #000; box-shadow:none; }
+.form--quote .form__section { padding:14px; }
+.form--quote .form__section--muted { background:#f0f0f0; border-top:3px solid #000; }
+.form--quote .form__section--warm { background:var(--prices-panel-colors); border-top:3px solid #000; }
+.form__grid { gap:14px; }
+.field__label { font:700 9px/1.7 var(--px); }
+.field__input,.field__input[type],textarea.field__input,select.field__input { border:2px solid #000; font:11px/1.6 var(--px); min-height:42px; padding:10px; }
+select.field__input { padding-right:34px; }
+.start-panel__text { font:11px/1.9 var(--px); }
+.footer__text,.footer__link { font:8px/1.7 var(--px); }
+@media(max-width:920px) {
+  .hero__inner { grid-template-columns:1fr; gap:8px; }
+  .hero__copy { padding:20px 12px; }
+  .hero-logo { width:230px; margin:12px auto; }
+  #prices .prices__grid { grid-template-columns:1fr; }
+  .prices__panel--colors { grid-column:auto; }
+}
+@media(max-width:640px) {
+  .desktop { padding:8px 8px calc(var(--taskbar-h) + 10px); }
+  .window__body { padding:6px; }
+  .window__titlebar { font-size:8px; }
+  .container { width:calc(100% - 12px); }
+  .hero__title { font-size:clamp(20px,5.8vw,30px); }
+  .hero__kicker { font-size:8px; }
+  .hero__subtitle { font-size:9px; }
+  .hero__actions .button { font-size:8px; padding:10px; }
+  .hero-logo { width:190px; }
+  .section-title,#prices .section-title { font-size:14px; }
+  .section-subtitle { font-size:10px; }
+  .prices,.quote,#prices .prices { padding:22px 0; }
+  #prices .prices__panel--colors { grid-template-columns:minmax(0,1fr) 90px; gap:0 10px; }
+  #prices .record-preview__stage { width:75px; }
+  .details-badge { font-size:7px; overflow-wrap:anywhere; }
+  .field__input,.field__input[type],textarea.field__input,select.field__input { font-size:10px; }
+}
+
+/* Original dark taskbar, with v2 icons and a permanent faint screen grid. */
+:root { --taskbar-h:44px; }
+body::before {
+  background:repeating-linear-gradient(0deg,transparent 0 3px,#00000006 3px 4px),repeating-linear-gradient(90deg,transparent 0 3px,#00000003 3px 4px);
+  opacity:1; visibility:visible;
+}
+body::after { display:none; }
+.taskbar { background:linear-gradient(#4f4f4f 0%,#2a2a2a 16%,#181818 100%); border-top:2px solid #fff; box-shadow:0 -1px #555; padding:5px 6px; }
+.taskbar__start,.taskbar__task,.taskbar__infos,.taskbar__lang-btn {
+  height:32px; border:2px solid; border-color:#fff #444 #444 #fff;
+  background:linear-gradient(#686868,#313131); color:#fff;
+  box-shadow:inset 1px 1px #ffffff26,inset -1px -1px #0008;
+  font:700 9px/1.4 var(--px); gap:6px; padding:0 9px;
+}
+.taskbar__start { min-width:98px; background:linear-gradient(#686868,#313131); }
+.taskbar__logo { width:24px; height:24px; padding:0; }
+.window__icon,.taskbar__logo { background:transparent; filter:brightness(0) invert(1); }
+.taskbar__icon { width:20px; height:20px; filter:drop-shadow(1px 1px #0006); }
+.taskbar__tasks { padding-left:0; margin-left:0; border:0; box-shadow:none; }
+.taskbar__task { min-width:116px; }
+.taskbar__lang { margin-left:auto; }
+.taskbar__lang-btn { font-size:8px; padding:0 6px; }
+.taskbar__start:hover,.taskbar__task:hover,.taskbar__infos:hover,.taskbar__lang-btn:hover,
+.taskbar__task--active,.taskbar__start.is-active,.taskbar__infos[aria-expanded="true"],.taskbar__lang-btn.is-active {
+  background:linear-gradient(#9bbc0f,#306230); color:#fff; border-color:#fff #444 #444 #fff;
+  box-shadow:inset 1px 1px #ffffff26,inset -1px -1px #0008;
+}
+.taskbar__start:active,.taskbar__task:active,.taskbar__infos:active,.taskbar__lang-btn:active { border-color:#222 #bbb #bbb #222; box-shadow:inset 1px 1px #0008; }
+.taskbar :focus-visible { outline:2px dotted #fff; outline-offset:-5px; }
+@media(min-width:641px) and (max-width:1050px) {
+  .taskbar__infos { width:32px; padding:0; }
+  .taskbar__task { min-width:104px; }
+}
+@media(max-width:640px) {
+  :root { --taskbar-h:82px; }
+  .taskbar { grid-template-rows:32px 26px; gap:6px; padding:6px; }
+  .taskbar__start { min-width:83px; padding:0 6px; font-size:9px; }
+  .taskbar__tasks { padding-left:0; }
+  .taskbar__task { min-width:0; padding:0 5px; font-size:8px; gap:4px; }
+  .taskbar__icon { width:18px; height:18px; }
+  .taskbar__lang { grid-column:1/-1; justify-self:end; }
+  .taskbar__lang-btn { height:26px; }
+}
+
+/* Scroll between full-height windows; each window's content fits inside it. */
+html { height:auto; overflow-x:hidden; overflow-y:auto; scroll-padding-top:8px; }
+body { height:auto; overflow:visible; }
+.desktop { height:auto; min-height:100dvh; padding:8px 8px calc(var(--taskbar-h) + 8px); overflow:clip; background:var(--desktop-bg); }
+#main { position:relative; inset:auto; width:100%; height:auto; overflow:visible; zoom:1; display:flex; flex-direction:column; gap:12px; }
+#main>.crt,#top.crt { display:flex; flex-direction:column; position:relative; inset:auto; margin:0; border:2px solid; border-color:#fff #2d2d2d #2d2d2d #fff; box-shadow:2px 2px #0005; min-height:0; height:calc(100dvh - var(--taskbar-h) - 16px); flex:none; scroll-margin:0; }
+#main>#footer-window { display:block; height:auto; min-height:0; border:0; box-shadow:none; background:transparent; }
+#main>#footer-window>.window { height:auto; display:block; }
+#main>#footer-window .window__body { position:static; padding:8px; overflow:visible; background:transparent; }
+#main>.crt>.window { flex:1; width:100%; height:100%; min-height:0; display:flex; flex-direction:column; }
+#main .window__titlebar { flex:none; }
+#main .window__body { position:relative; flex:1; min-height:0; padding:0; border:0; overflow:hidden; display:block; }
+#main .window__body>section { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); transform-origin:center; margin:0; }
+#main .container { max-width:1060px; width:calc(100% - 36px); }
+#main .hero { padding:16px 0; }
+#main .hero__copy { min-width:0; }
+#main .hero__inner { grid-template-columns:1.3fr .7fr; }
+#main .prices,#main .quote { padding:14px 0; }
+#prices .section-head,.quote .section-head { margin-bottom:10px; }
+#prices .prices__grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+#prices .prices__panel { padding:9px; }
+#prices .prices__panel--colors { grid-column:1/-1; }
+#prices .prices__details { margin-top:8px; }
+#prices .details-table { grid-template-columns:1fr 1fr 1fr; }
+#prices .details-row { grid-template-columns:1fr auto; padding:8px; }
+#prices .details-card { padding:10px; }
+#prices .details-card__head { margin:-10px -10px 8px; padding:8px 10px; }
+#prices .hero__actions { margin-top:10px; }
+#main .form__grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 14px; }
+#main .form--quote .form__section { padding:10px 14px; }
+#main .field { gap:5px; }
+#main .field__input { min-height:34px; padding:7px 10px; }
+#main textarea.field__input { height:62px; min-height:62px; resize:none; }
+#main .form__actions { margin-top:9px; }
+#main .quote__inner { gap:9px; }
+#main .footer { padding:0; }
+#main .footer__inner { flex-wrap:wrap; justify-content:center; gap:5px 12px; }
+@media(max-width:640px) {
+  #main .hero__inner { grid-template-columns:minmax(0,1fr); gap:0; }
+  #main .hero__title { overflow-wrap:anywhere; }
+  #main .hero__actions .button { max-width:100%; }
+  #main .hero-logo { margin:6px auto; }
+  #main .hero__copy { padding:12px 4px; }
+}
+
+/* Keep the phone preview beside the choices, with no empty header row. */
+@media(max-width:640px) {
+  #prices #pricesColorPanel { grid-template-columns:minmax(0,1fr) 116px; gap:8px 16px; align-items:start; }
+  #prices #pricesColorPanel>.panel-title { grid-column:1; grid-row:1; align-self:start; margin:0; }
+  #prices #pricesColorPanel>.chips { grid-column:1; grid-row:2; align-self:start; }
+  #prices #pricesColorPanel>.prices__color-hint { grid-column:1/-1; grid-row:3; margin-top:0; }
+  #prices #pricesColorPanel>.record-preview { grid-column:2; grid-row:1/3; align-self:center; justify-self:center; width:116px; }
+  #prices .record-preview__stage { width:108px; padding:0; }
+  #prices .record-preview figcaption { padding-top:5px; }
+  #prices .record-preview figcaption strong { display:block; font:8px/1.5 var(--px); }
+}
+
+/* Taskbar buttons hug their labels; only Start and languages retain icons. */
+.taskbar .taskbar__start,.taskbar .taskbar__task,.taskbar .taskbar__infos,.taskbar .taskbar__lang-btn {
+  width:auto; min-width:0; flex:0 0 auto; padding-inline:9px;
+}
+.taskbar .taskbar__tasks { flex:1 1 auto; justify-content:flex-start; }
+.taskbar .taskbar__infos>span { display:inline; }
+.taskbar .taskbar__flag { display:inline-block; }
+@media(min-width:641px) and (max-width:900px) {
+  .taskbar { gap:4px; }
+  .taskbar .taskbar__start,.taskbar .taskbar__task,.taskbar .taskbar__infos,.taskbar .taskbar__lang-btn { padding-inline:5px; font-size:8px; }
+}
+@media(max-width:640px) {
+  .taskbar { grid-template-columns:auto 1fr auto; }
+  .taskbar .taskbar__tasks { justify-content:flex-start; }
+}
+
+/* The sleeve expands the window, while the disc keeps its physical size. */
+#prices #pricesColorPanel { display:block; grid-column:1; min-width:0; }
+#prices .prices-workspace { display:block; }
+#prices .prices-preview-row { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1fr) max-content; gap:12px; align-items:stretch; }
+#prices .prices-preview-row > .record-preview {
+  grid-column:2; grid-row:1; display:flex; flex-direction:column; align-self:stretch; position:static; width:168px; max-width:100%; overflow:hidden; padding:3px; margin:0;
+  border:2px solid #111; background:#c4c4bc;
+  box-shadow:inset 1px 1px #fff,inset -1px -1px #777,3px 3px #111;
+}
+#prices .prices-preview-row > .record-preview[data-sleeve="printed"] { width:224px; }
+#prices .prices-preview-row > .record-preview[data-sleeve="gatefold"] { width:280px; }
+.record-preview__bar { padding:4px 5px; margin-bottom:3px; border:1px solid #222; background:linear-gradient(90deg,#34372d,#777d65); color:#fff; font:8px/1.4 var(--px); }
+#prices .record-preview__stage { position:relative; display:block; width:100%; min-height:148px; flex:1; aspect-ratio:auto; margin:0; padding:0; overflow:hidden; border:1px solid #777; background:radial-gradient(#bcc0b5 .65px,transparent .8px) 0 0/8px 8px #eeeee7; }
+#prices .record-preview img { position:absolute; display:block; height:auto; aspect-ratio:auto; object-fit:contain; filter:drop-shadow(2px 3px 2px #0003); transition:opacity .3s; }
+#prices .record-preview .record-preview__disc { z-index:1; width:128px; left:14px; top:8px; transform:none; }
+#prices .record-preview__sleeve { z-index:2; opacity:0; pointer-events:none; }
+#prices .record-preview__sleeve--normal { width:128px; left:8px; top:8px; }
+#prices .record-preview__sleeve--gatefold { width:230px; left:6px; top:22px; }
+#prices .record-preview[data-sleeve="printed"] .record-preview__sleeve--normal,
+#prices .record-preview[data-sleeve="gatefold"] .record-preview__sleeve--gatefold { opacity:1; }
+#prices .record-preview[data-sleeve="printed"] .record-preview__disc { left:72px; }
+#prices .record-preview[data-sleeve="gatefold"] .record-preview__disc { left:132px; z-index:3; }
+#prices .record-preview[data-record="7"] .record-preview__disc { transform:scale(.7); }
+#prices .record-preview[data-record="7"][data-sleeve="printed"] .record-preview__sleeve--normal { transform:scale(.7); transform-origin:30% 50%; }
+
+@media(prefers-reduced-motion:reduce) { #prices .record-preview img { transition:none; } }
+/* Keep every taskbar action visible on phones, including narrow Italian layouts. */
+@media(max-width:640px) {
+  :root { --taskbar-h:82px; }
+  .taskbar { display:grid; grid-template-columns:max-content max-content 1fr max-content; grid-template-rows:32px 32px; gap:5px 6px; padding:5px 6px; align-content:start; }
+  .taskbar .taskbar__start { grid-column:1; grid-row:1; }
+  .taskbar .taskbar__tasks { grid-column:2/4; grid-row:1; display:flex; gap:6px; }
+  .taskbar .taskbar__lang { grid-column:4; grid-row:1; margin:0; justify-self:end; }
+  .taskbar .taskbar__lang-btn { height:32px; padding-inline:6px; }
+  .taskbar .taskbar__infos { display:inline-flex; height:32px; padding-inline:9px; font-size:8px; justify-self:start; }
+  #downloadFilesButton { grid-column:1; grid-row:2; }
+  #infosButton { grid-column:2; grid-row:2; }
+  #storyButton { grid-column:3/5; grid-row:2; }
+}
+@media(max-width:440px) {
+  :root { --taskbar-h:116px; }
+  .taskbar { grid-template-columns:max-content max-content 1fr; grid-template-rows:32px 32px 28px; }
+  .taskbar .taskbar__tasks { grid-column:2/4; }
+  .taskbar .taskbar__lang { grid-column:1/-1; grid-row:3; }
+  .taskbar .taskbar__lang-btn { height:28px; }
+  #storyButton { grid-column:3; }
+}
+@media(max-width:640px) {
+  .start-panel { top:auto !important; bottom:calc(var(--taskbar-h) + 8px) !important; max-height:calc(100dvh - var(--taskbar-h) - 24px); }
+}
+
+/* Phone taskbar: original actions and languages share one compact row. */
+@media(max-width:640px) {
+  :root { --taskbar-h:44px; }
+  .taskbar { display:flex; flex-wrap:nowrap; align-items:center; gap:5px; padding:5px 6px; }
+  .taskbar .taskbar__infos { display:none; }
+  .taskbar .taskbar__start { padding-inline:6px; font-size:8px; gap:4px; }
+  .taskbar .taskbar__logo { width:20px; height:20px; }
+  .taskbar .taskbar__tasks { flex:1 1 auto; min-width:0; gap:4px; }
+  .taskbar .taskbar__task { padding-inline:6px; font-size:8px; }
+  .taskbar .taskbar__lang { flex:none; margin-left:auto; gap:3px; }
+  .taskbar .taskbar__lang-btn { height:32px; padding-inline:5px; gap:4px; font-size:8px; }
+  .taskbar .taskbar__flag { width:13px; height:10px; }
+}
+@media(max-width:380px) {
+  .taskbar { gap:3px; padding-inline:4px; }
+  .taskbar .taskbar__start,.taskbar .taskbar__task,.taskbar .taskbar__lang-btn { font-size:7px; padding-inline:4px; }
+  .taskbar .taskbar__logo { width:17px; height:17px; }
+  .taskbar .taskbar__tasks { gap:3px; }
+  .taskbar .taskbar__lang-btn { gap:3px; }
+  .taskbar .taskbar__flag { width:11px; height:9px; }
+}
+
+/* Highlight the two monetary results in the summary. */
+#prices .details-card .details-table .details-row:first-child { background:#fff0a6; }
+#prices .details-card .details-table .details-row.details-row--total { background:#b8ff1a; border-color:#111; }
+#prices .details-card .details-table .details-row:first-child .details-cell,
+#prices .details-card .details-table .details-row--total .details-cell { color:#111; }
+
+/* Compare the supplied logo with the matching Blob Logo Studio mesh. */
+#main .hero__visual { flex-direction:column; min-width:0; }
+#main .hero-logo[data-logo3d] { position:relative; display:grid; place-items:center; width:min(440px,100%); height:auto; aspect-ratio:1.35; min-height:0; padding:0; margin:0 auto; overflow:hidden; }
+#main .hero-logo[data-logo3d] .hero-logo__img { width:100%; height:auto; animation:none; filter:none; }
+.logo3d__canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.logo3d__canvas[hidden] { display:none; }
+#mainWindow [data-logo3d][data-mode="3d"] { touch-action:none; }
+.hero-logo[data-mode="2d"] .logo3d__canvas { display:none; }
+.hero-logo[data-mode="3d"].is-3d .hero-logo__img { visibility:hidden; }
+/* Opening in 3D: keep the flat artwork hidden while the meshes load; it only returns if 3D fails. */
+:root[data-view-mode="3d"] .hero-logo[data-logo3d]:not(.is-3d-failed) .hero-logo__img { visibility:hidden; }
+.logo-mode-controls { display:flex; justify-content:center; gap:8px; }
+.logo-mode-controls .chip[aria-pressed="true"] { background:#111; color:#c2ff00; }
+#logoModeStatus { font:11px/1.5 "Segoe UI",sans-serif; margin:8px 0 0; }
+#logoModeStatus:empty { display:none; }
+/* v2claude taskbar and utility tray. Keep the existing page styles scoped out. */
+:root { --taskbar-h:40px; }
+.taskbar {
+  --window-title:#4f4f4f; --window-title-ink:#f7f7f7;
+  --window-face:#c0c0c0; --window-face-ink:#111; --window-face-hover:#d4d4d4;
+  --bevel-light:#fff; --bevel-dark:#444; --pixel-ink:#000;
+  --dmg-light:#9bbc0f; --dmg-dark:#306230; --dmg-hover:#3f7a3f; --on-dmg:#fff;
+}.taskbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000;
+  display: flex; align-items: center; gap: 6px;
+  height: var(--taskbar-h); padding: 0 6px;
+  background: var(--window-title);
+  border-top: 2px solid var(--bevel-light);
+  box-shadow: 0 -2px 0 var(--pixel-ink);
+}
+.taskbar .taskbar__start,
+.taskbar .taskbar__task,
+.taskbar .taskbar__lang-btn,
+.taskbar .taskbar__crt-toggle {
+  display: inline-flex; align-items: center; gap: 7px;
+  height: 30px; padding: 0 10px;
+  background: var(--window-face); color: var(--window-face-ink);
+  border: 0; border-radius: 0;
+  box-shadow: inset 2px 2px 0 var(--bevel-light), inset -2px -2px 0 var(--bevel-dark);
+  font: 10px/1 "BLOB Pixel",Consolas,monospace; letter-spacing: 0.1em; text-transform: uppercase;
+  -webkit-font-smoothing: none;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+}
+.taskbar .taskbar__start:hover,
+.taskbar .taskbar__task:hover,
+.taskbar .taskbar__lang-btn:hover { background: var(--window-face-hover); }
+.taskbar .taskbar__start:active,
+.taskbar .taskbar__task:active,
+.taskbar .taskbar__lang-btn:active,
+.taskbar .taskbar__crt-toggle:active { box-shadow: inset 2px 2px 0 var(--bevel-dark), inset -2px -2px 0 var(--bevel-light); }
+
+.taskbar .taskbar__start { background: var(--signal); color: #000; }
+.taskbar .taskbar__start:hover { background: var(--dmg-light); }
+.taskbar .taskbar__logo { width: 26px; height: auto; }
+.taskbar .taskbar__start.is-active { box-shadow: inset 2px 2px 0 var(--bevel-dark), inset -2px -2px 0 var(--bevel-light); }
+
+.taskbar .taskbar__tasks,
+.taskbar .taskbar__extras { display: flex; gap: 4px; min-width: 0; }
+.taskbar .taskbar__tasks { flex: 1; }
+.taskbar .taskbar__task--active,
+.taskbar .taskbar__task[aria-expanded="true"],
+.taskbar .taskbar__lang-btn.is-active {
+  background: var(--dmg-dark); color: var(--on-dmg);
+  box-shadow: inset 2px 2px 0 #0f2a0f, inset -2px -2px 0 var(--dmg-light);
+}
+.taskbar .taskbar__task--active:hover,
+.taskbar .taskbar__task[aria-expanded="true"]:hover,
+.taskbar .taskbar__lang-btn.is-active:hover { background: var(--dmg-hover); }
+
+.taskbar .taskbar__tray {
+  display: flex; align-items: center; gap: 8px;
+  height: 30px; padding: 0 4px;
+  box-shadow: inset 2px 2px 0 var(--bevel-dark), inset -2px -2px 0 var(--bevel-light);
+}
+.taskbar .taskbar__crt { display: flex; align-items: center; gap: 6px; }
+.taskbar .taskbar__crt-label { color: var(--window-title-ink); font: 10px/1 "BLOB Pixel",Consolas,monospace; letter-spacing: 0.1em; -webkit-font-smoothing: none; }
+.taskbar .taskbar__crt-toggle { height: 22px; padding: 0 7px; min-width: 40px; justify-content: center; }
+.taskbar .taskbar__crt-toggle[aria-pressed="true"] { background: var(--signal); color: #000; }
+.taskbar .taskbar__lang { display: flex; gap: 2px; }
+.taskbar .taskbar__lang-btn { height: 22px; padding: 0 6px; gap: 5px; }
+.taskbar .taskbar__flag { width: 14px; height: 10px; border: 1px solid #000; flex: none; }
+.taskbar .taskbar__flag--it,.settings-panel .taskbar__flag--it { background: linear-gradient(90deg, #009246 33.3%, #fff 33.3% 66.6%, #ce2b37 66.6%); }
+.taskbar .taskbar__flag--england,.settings-panel .taskbar__flag--england {
+  background:
+    linear-gradient(#ce1124, #ce1124) 50% 50% / 100% 2px no-repeat,
+    linear-gradient(#ce1124, #ce1124) 50% 50% / 2px 100% no-repeat,
+    #fff;
+}
+
+.taskbar .taskbar__start,.taskbar .taskbar__task { min-width:0; width:auto; font-weight:400; }
+.taskbar .taskbar__logo { filter:none; padding:0; object-fit:contain; }
+.taskbar .taskbar__tasks { margin:0; padding:0; border:0; box-shadow:none; }
+.taskbar .taskbar__crt { margin:0; padding:0; border:0; background:none; }
+.taskbar .taskbar__crt-toggle { width:auto; border-radius:0; }
+.taskbar .taskbar__crt-toggle::before,.taskbar .taskbar__crt-toggle::after { content:none; }
+.taskbar .taskbar__lang { margin:0; }
+.taskbar .taskbar__flag { display:inline-block; }
+.taskbar .icon,.start-menu__item .icon { width:16px; height:16px; flex:none; }
+.taskbar .logo-mode-controls { display:flex; gap:2px; }
+.taskbar .taskbar__mode-btn {
+  display:inline-flex; align-items:center; justify-content:center; height:22px; padding:0 6px;
+  border:0; border-radius:0; background:#c0c0c0; color:#111;
+  box-shadow:inset 2px 2px #fff,inset -2px -2px #444;
+  font:10px/1 "BLOB Pixel",Consolas,monospace; cursor:pointer;
+}
+.taskbar .taskbar__mode-btn[aria-pressed="true"] { background:#306230; color:white; box-shadow:inset 2px 2px #0f2a0f,inset -2px -2px #9bbc0f; }
+.taskbar .taskbar__mode-btn:hover { background:#d4d4d4; color:#111; }
+body.crt-disabled::before { opacity:0; visibility:hidden; }
+@media(max-width:1100px) {
+  .taskbar .taskbar__extras .taskbar__task { padding-inline:8px; }
+  .taskbar .taskbar__extras .taskbar__task span { display:none; }
+}
+@media(max-width:800px) and (min-width:641px) {
+  .taskbar .taskbar__tasks .taskbar__task span { display:none; }
+}
+@media(max-width:640px) {
+  .taskbar { display:flex; flex-wrap:nowrap; gap:6px; padding:0 6px; }
+  .taskbar .taskbar__tasks,.taskbar .taskbar__extras { display:none; }
+  .taskbar .taskbar__start { font:10px/1 "BLOB Pixel",Consolas,monospace; padding:0 8px; gap:5px; }
+  .taskbar .taskbar__tray { margin-left:auto; gap:6px; }
+  .taskbar .taskbar__crt-label { display:none; }
+  .taskbar .taskbar__lang-btn { height:22px; padding:0 6px; font:10px/1 "BLOB Pixel",Consolas,monospace; gap:5px; }
+  .taskbar .taskbar__logo { width:26px; height:auto; }
+}
+@media(max-width:380px) {
+  .taskbar .taskbar__lang-btn .taskbar__flag { display:none; }
+  .taskbar .taskbar__tray { gap:4px; }
+}
+
+/* Shared v2claude icons for price categories and quote groups. */
+#prices .panel-title,#prices .details-title,#prices .prices__chip-group-label:not(.is-hidden),
+#quote .form__section > .panel-title {
+  display:flex; align-items:center; gap:8px;
+}
+#prices .section-icon,#quote .section-icon { width:16px; height:16px; flex:none; }
+#prices .panel-title .section-icon,#prices .prices__chip-group-label .section-icon,
+#prices .details-title .section-icon,#quote .panel-title .section-icon { color:#686b60; }
+#quote .form__section > .panel-title {
+  margin:0 0 18px; padding-bottom:12px; border-bottom:1px solid #b8b8b0;
+  color:#141412;
+}
+#quote .form--quote {
+  display:grid; gap:22px; border:0; background:transparent; box-shadow:none;
+  overflow:visible;
+}
+#main #quote .form--quote .form__section {
+  padding:20px; border:2px solid #000; box-shadow:3px 3px #000;
+}
+#quote .form__section--light { background:#f3f8fb; }
+#quote .form__section--muted { background:#f0f0f0; }
+#quote .form__section--warm { background:#faf7ef; }
+#main #quote .form__grid { gap:18px 20px; }
+@media(max-width:640px) {
+  #quote .form--quote { gap:18px; }
+  #main #quote .form--quote .form__section { padding:16px; }
+  #main #quote .form__grid { gap:16px; }
+}
+
+#prices .button:has(.section-icon),#quote .button:has(.section-icon) { gap:8px; }
+
+/* Match the restored dark window style while retaining the utility layout. */
+.taskbar {
+  background:linear-gradient(#4f4f4f 0%,#2a2a2a 16%,#181818 100%);
+  border-top:2px solid #fff; box-shadow:0 -1px #555;
+}
+.taskbar .taskbar__start,.taskbar .taskbar__task,
+.taskbar .taskbar__lang-btn,.taskbar .taskbar__crt-toggle,.taskbar .taskbar__mode-btn {
+  border:2px solid; border-color:#fff #444 #444 #fff;
+  background:linear-gradient(#686868,#313131); color:#fff;
+  box-shadow:inset 1px 1px #ffffff26,inset -1px -1px #0008;
+  font:700 9px/1.4 var(--px); letter-spacing:.02em;
+}
+.taskbar .taskbar__logo { filter:brightness(0) invert(1); }
+.taskbar .taskbar__tray {
+  background:#252525;
+  box-shadow:inset 1px 1px #080808,inset -1px -1px #777;
+}
+.taskbar .taskbar__crt-label { font:700 8px/1.4 var(--px); color:#fff; }
+.taskbar .taskbar__lang-btn,.taskbar .taskbar__crt-toggle,.taskbar .taskbar__mode-btn {
+  font-size:8px;
+}
+.taskbar .taskbar__start:hover,.taskbar .taskbar__task:hover,
+.taskbar .taskbar__lang-btn:hover,.taskbar .taskbar__crt-toggle:hover,.taskbar .taskbar__mode-btn:hover,
+.taskbar .taskbar__start.is-active,.taskbar .taskbar__task--active,
+.taskbar .taskbar__task[aria-expanded="true"],.taskbar .taskbar__lang-btn.is-active,
+.taskbar .taskbar__crt-toggle[aria-pressed="true"],.taskbar .taskbar__mode-btn[aria-pressed="true"] {
+  background:linear-gradient(#9bbc0f,#306230); color:#fff;
+  box-shadow:inset 1px 1px #ffffff26,inset -1px -1px #0008;
+}
+.taskbar .taskbar__start:active,.taskbar .taskbar__task:active,
+.taskbar .taskbar__lang-btn:active,.taskbar .taskbar__crt-toggle:active,.taskbar .taskbar__mode-btn:active {
+  border-color:#222 #bbb #bbb #222; box-shadow:inset 1px 1px #0008;
+}
+@media(max-width:640px) {
+  .taskbar .taskbar__start { font-size:8px; padding-inline:6px; }
+  .taskbar .taskbar__logo { width:20px; }
+}
+/* Start: BLOB lettering, tagline and actions beside the matching logo. */
+#main .hero__copy .hero-wordmark[data-logo3d] { width:min(440px,100%); aspect-ratio:3; margin:0 auto 22px; }
+#main .hero__copy .hero-wordmark .hero-logo__img { aspect-ratio:1810/606; }
+#main .hero__copy { align-self:center; }
+@media(max-width:640px) {
+  #main .hero__copy .hero-wordmark[data-logo3d] { width:min(330px,100%); margin-bottom:18px; }
+}
+
+/* Start-window options and a calmer hero composition. */
+#main .hero__inner { column-gap:48px; row-gap:24px; align-items:center; }
+#main .hero__copy { display:flex; flex-direction:column; align-items:center; gap:26px; padding:12px 0; }
+#main .hero__copy .hero-wordmark[data-logo3d] { width:min(380px,100%); margin:0; }
+#main .hero__copy .hero__title { margin:0; }
+#main .hero__copy .hero__actions { margin:0; gap:16px; }
+#main .hero__visual .hero-logo[data-logo3d] { width:86%; max-width:360px; }
+.hero-options { grid-column:1/-1; justify-self:center; padding:0; border:2px solid; border-color:#fff #444 #444 #fff; background:#c0c0c0; box-shadow:2px 2px #000; }
+.hero-options h2 { margin:0; padding:6px 10px; background:#4f4f4f; color:#fff; font:9px/1.4 var(--px); }
+.hero-options .taskbar__tray { display:flex; align-items:center; flex-wrap:wrap; justify-content:center; gap:16px; padding:10px 12px; }
+.hero-options .logo-mode-controls,.hero-options .taskbar__crt,.hero-options .taskbar__lang { display:flex; align-items:center; gap:5px; margin:0; padding:0; border:0; background:none; }
+.hero-options .taskbar__crt-label { color:#111; font:8px/1.4 var(--px); }
+.hero-options button { display:inline-flex; align-items:center; justify-content:center; gap:5px; width:auto; min-width:38px; height:28px; padding:0 7px; border:2px solid; border-color:#fff #444 #444 #fff; border-radius:0; background:linear-gradient(#686868,#313131); color:#fff; font:8px/1.4 var(--px); box-shadow:inset 1px 1px #ffffff26,inset -1px -1px #0008; cursor:pointer; }
+.hero-options button[aria-pressed="true"],.hero-options button:hover { background:linear-gradient(#9bbc0f,#306230); color:#fff; }
+.hero-options button:active { border-color:#222 #bbb #bbb #222; }
+.hero-options button:focus-visible { outline:2px dotted #111; outline-offset:2px; }
+.hero-options .taskbar__flag { display:inline-block; width:14px; height:10px; flex:none; }
+.hero-options .taskbar__crt-toggle::before,.hero-options .taskbar__crt-toggle::after { content:none; }
+@media(max-width:640px) {
+  #main .hero__inner { gap:14px; }
+  #main .hero__copy { gap:18px; padding:8px 0; }
+  #main .hero__copy .hero-wordmark[data-logo3d] { width:min(280px,90%); margin:0; }
+  #main .hero__visual .hero-logo[data-logo3d] { width:65%; max-width:230px; }
+  .hero-options .taskbar__tray { gap:10px; padding:8px; }
+}
+
+/* Dock the display preferences in the Start window's upper-right corner. */
+#main .hero-options { position:absolute; top:12px; right:12px; z-index:2; width:272px; max-width:calc(100% - 24px); }
+.hero-options h2 { display:flex; align-items:center; gap:8px; background:linear-gradient(#4f4f4f,#292929); padding:7px 9px; }
+.hero-options h2::before { content:""; width:6px; height:6px; background:#b8ff1a; box-shadow:1px 1px #000; }
+.hero-options__row { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 8px; padding:6px 0; border-bottom:1px solid #999; font:8px/1.5 var(--px); }
+.hero-options__row:last-of-type { border-bottom:0; }
+.hero-options__hint { margin:0; padding:7px 9px; border-top:1px solid #888; background:#e5e5e0; color:#444; font:10px/1.4 "Segoe UI",sans-serif; }
+#main .hero__copy { gap:42px; }
+#main .hero__copy .hero__actions { gap:22px; }
+@media(max-width:640px) {
+  #main .hero-options { top:8px; right:8px; width:262px; max-width:calc(100% - 16px); }
+  #main .hero__copy { gap:26px; }
+  #main .hero__copy .hero__actions { gap:12px; }
+}
+
+/* Compact preferences, with the hero centered independently on desktop. */
+#main .hero-options { width:210px; top:10px; right:10px; }
+.hero-options h2 { padding:4px 7px; font-size:8px; gap:6px; }
+.hero-options h2::before { width:5px; height:5px; }
+.hero-options__row { margin:0 6px; padding:3px 0; gap:6px; font-size:7px; }
+.hero-options button { min-width:30px; height:23px; padding:0 4px; font-size:7px; gap:3px; }
+.hero-options .logo-mode-controls,.hero-options .taskbar__lang { gap:3px; }
+.hero-options .taskbar__flag { width:11px; height:8px; }
+.hero-options__hint { display:none; }
+#main .hero__inner { column-gap:80px; }
+#main .hero__copy { gap:52px; }
+#main .hero__copy .hero__actions { gap:26px; }
+@media(max-width:640px) {
+  #main .hero-options { top:7px; right:7px; }
+  #main .hero__inner { row-gap:22px; column-gap:0; }
+  #main .hero__copy { gap:30px; }
+  #main .hero__copy .hero__actions { gap:16px; }
+}
+
+/* Keep the native browser arrow consistent throughout the site. */
+html, body, body * { cursor:default !important; }
+
+.logo-random-color { position:absolute; top:10px; left:10px; z-index:2; height:32px; padding:0 10px; border:2px solid; border-color:#fff #444 #444 #fff; border-radius:0; background:linear-gradient(#686868,#313131); color:#fff; font:7px/1.4 var(--px); box-shadow:2px 2px #000; }
+.logo-random-color:hover { background:linear-gradient(#9bbc0f,#306230); }
+.logo-random-color:active { border-color:#222 #bbb #bbb #222; }
+.logo-random-color:focus-visible { outline:2px dotted #111; outline-offset:2px; }
+@media(max-width:640px) { .logo-random-color { top:7px; left:7px; } }
+@media(max-width:400px) { #main .hero-options { top:46px !important; } }
+
+/* A compact utility strip, with the hero grouped around the window center. */
+#main .hero-options { width:auto; max-width:calc(100% - 20px); display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center; gap:8px; padding:4px 6px; background:linear-gradient(#4f4f4f,#292929); }
+.hero-options h2,.hero-options__hint { display:none; }
+.hero-options__row { margin:0; padding:0; border:0; gap:5px; }
+.hero-options__row > span { display:none; }
+.hero-options__row:nth-of-type(2) > span { display:inline; color:#fff; font-size:7px; }
+.hero-options button { height:22px; min-width:28px; padding:0 4px; }
+#main .hero__inner { max-width:960px; grid-template-columns:1.2fr .8fr; column-gap:36px; }
+#main .hero__copy { gap:42px; }
+#main .hero__visual .hero-logo[data-logo3d] { width:90%; max-width:330px; }
+@media(max-width:640px) {
+  #main .hero-options { top:7px; right:7px; gap:6px; }
+  #main .hero__inner { grid-template-columns:minmax(0,1fr); row-gap:18px; }
+  #main .hero__copy { gap:26px; }
+  #main .hero__visual .hero-logo[data-logo3d] { width:65%; max-width:230px; }
+}
+
+/* Utility controls share the pricing chips' ink borders and raised color faces. */
+#main .hero-options {
+  background:#f0f0f0; border:2px solid #000;
+  box-shadow:inset 1px 1px #fff,2px 2px #000;
+  padding:6px 8px; gap:10px;
+}
+.hero-options__row:nth-of-type(2) > span { color:#141412; }
+.taskbar {
+  background:#f0f0f0; border-top:2px solid #000;
+  box-shadow:inset 0 2px #fff; gap:8px;
+}
+.taskbar .taskbar__tasks,.taskbar .taskbar__extras { gap:8px; }
+.hero-options button,.logo-random-color,
+.taskbar .taskbar__start,.taskbar .taskbar__task,.start-menu__item {
+  --utility-face:#fff;
+  border:2px solid #000; border-radius:0;
+  background:var(--utility-face); color:#141412;
+  box-shadow:inset 1px 1px #ffffffb3,inset -1px -1px #0002,2px 2px #141412;
+  text-shadow:none;
+}
+.hero-options button[data-logo-mode] { --utility-face:#cbe8ff; }
+.taskbar .taskbar__lang { gap:6px; margin-left:4px; flex-shrink:0; }
+.taskbar .taskbar__lang button[data-lang-button] { --utility-face:#d6d6d6; padding-inline:8px; }
+.taskbar .taskbar__start,.start-menu__item[href="#top"] { --utility-face:#b8ff1a; }
+.taskbar .taskbar__task[href="#prices"],.start-menu__item[href="#prices"] { --utility-face:#d6d6d6; }
+.taskbar .taskbar__task[href="#quote"],.start-menu__item[href="#quote"] { --utility-face:#d6d6d6; }
+.taskbar #downloadFilesButton,.start-menu__item[data-mobile-trigger="downloadFilesButton"] { --utility-face:#d6d6d6; }
+.taskbar #infosButton,.start-menu__item[data-mobile-trigger="infosButton"] { --utility-face:#d6d6d6; }
+.taskbar #storyButton,.start-menu__item[data-mobile-trigger="storyButton"] { --utility-face:#bdebd4; }
+.logo-random-color {
+  --utility-face:#b8ff1a;
+  background:var(--utility-face);
+}
+.taskbar .taskbar__logo { filter:none; }
+.hero-options button:hover,.logo-random-color:hover,
+.taskbar .taskbar__start:hover,.taskbar .taskbar__task:hover,.start-menu__item:hover {
+  background:var(--utility-face,#fff); color:#141412;
+  box-shadow:inset 1px 1px #fff,inset -1px -1px #0003,2px 2px #141412;
+  filter:brightness(1.06);
+}
+.hero-options button[aria-pressed="true"],
+.taskbar .taskbar__lang button[aria-pressed="true"],
+.taskbar .taskbar__start.is-active,.taskbar .taskbar__task--active,
+.taskbar .taskbar__task[aria-expanded="true"] {
+  background:var(--utility-face); color:#141412;
+  box-shadow:inset 2px 2px #0005,inset -1px -1px #fff;
+  text-decoration:underline; text-underline-offset:3px;
+}
+.taskbar .taskbar__task.taskbar__task--active,
+.taskbar .taskbar__task.taskbar__task--active:hover,
+.taskbar .taskbar__task[aria-expanded="true"],
+.taskbar .taskbar__task[aria-expanded="true"]:hover,
+.taskbar .taskbar__lang button[aria-pressed="true"],
+.taskbar .taskbar__lang button[aria-pressed="true"]:hover {
+  background:#306230; color:#fff; filter:none;
+}
+.taskbar .taskbar__task:active,
+.taskbar .taskbar__lang button:active {
+  background:#306230; color:#fff; filter:none;
+}
+.taskbar .taskbar__start.is-active,.taskbar .taskbar__start:active {
+  background:#b8ff1a; color:#141412; filter:none;
+}
+.hero-options .hero-language-panel {
+  position:absolute; top:calc(100% + 8px); right:-2px;
+  padding:6px 8px; gap:6px; background:#f0f0f0;
+  border:2px solid #000; box-shadow:inset 1px 1px #fff,2px 2px #000;
+}
+.hero-options button[data-lang-button] { --utility-face:#d6d6d6; }
+@media(min-width:641px) {
+  #main .hero__visual [data-logo3d][data-mode="2d"] .hero-logo__img { width:85%; margin-inline:auto; }
+}
+.hero-options button:active,.logo-random-color:active,
+.taskbar .taskbar__start:active,.taskbar .taskbar__task:active,.start-menu__item:active {
+  border-color:#000; transform:translate(1px,1px);
+  box-shadow:inset 2px 2px #0005,inset -1px -1px #fff;
+}
+.hero-options button:focus-visible,.logo-random-color:focus-visible,
+.taskbar .taskbar__start:focus-visible,.taskbar .taskbar__task:focus-visible,.start-menu__item:focus-visible {
+  outline:2px dotted #141412; outline-offset:3px;
+}
+@media(max-width:640px) {
+  #main .hero-options { gap:6px; padding:5px 6px; }
+  .taskbar .taskbar__lang { margin-left:auto; }
+}
+
+/* Start vinyl selector: the chosen pair in front, the neighbouring pairs smaller behind it. */
+#main .start-record {
+  position:relative; width:min(600px,100%); aspect-ratio:2.1; margin:-6px auto -10px;
+  cursor:grab; touch-action:pan-y; user-select:none; -webkit-user-select:none; outline:none;
+  --vinyl:#b8ff1a; --label:#ffffff;
+}
+#main .start-record.is-picking { cursor:pointer; }
+#main .start-record.is-dragging { cursor:grabbing; }
+#main .start-record:focus-visible { outline:2px dotted #141412; outline-offset:4px; }
+#main .start-record canvas {
+  position:absolute; inset:0; width:100%; height:100%; display:block;
+  -webkit-mask-image:linear-gradient(90deg,#0000,#000 12%,#000 88%,#0000); mask-image:linear-gradient(90deg,#0000,#000 12%,#000 88%,#0000);
+}
+#main .start-record canvas[hidden] { display:none; }
+#main .start-record__fallback {
+  position:absolute; top:50%; left:50%; height:86%; aspect-ratio:1; transform:translate(-50%,-50%);
+  border-radius:50%; border:2px solid #000; box-shadow:4px 4px #000;
+  background:
+    radial-gradient(circle, #fff0 0 2.2%, var(--label) 2.4% 34%, #0003 34.4% 35%, #fff0 35.4%),
+    repeating-radial-gradient(circle, #0000 0 3px, #0000001a 3px 4px),
+    var(--vinyl);
+}
+#main .start-record__fallback[hidden] { display:none; }
+:root[data-view-mode] #main .start-record:not([data-render-error]) .start-record__fallback { display:none; }
+@media(max-width:640px) {
+  #main .start-record { width:calc(100% + 24px); max-width:none; margin:-4px -12px -8px; }
+}
+
+/* Only the language buttons remain in the hero options; drop the empty frame around them. */
+#main .hero-options { background:none; border:0; box-shadow:none; padding:0; }
+
+/* One column at every size: wordmark, record selector, buttons, then the 3D logo. */
+#main .hero__inner { grid-template-columns:minmax(0,1fr); max-width:1100px; row-gap:22px; column-gap:0; }
+#main .hero__copy { width:100%; }
+#main .hero__visual .hero-logo[data-logo3d] { width:65%; max-width:260px; }
+#main .start-record { width:min(1000px,100%); aspect-ratio:auto; height:clamp(170px, calc(22vw + 100px), 270px); }
+@media(max-width:640px) {
+  #main .hero__inner { row-gap:18px; }
+  #main .hero__visual .hero-logo[data-logo3d] { max-width:230px; }
+  #main .start-record { width:calc(100% + 24px); }
+}
+
+/* Hero proportions: one unit (the record height) sizes everything, using the phone layout's ratios.
+   The unit follows the narrower of width and height so the stack always fits the window. */
+#main .hero__inner { --hero-h:clamp(110px, min(46vw, 28svh), 270px); row-gap:calc(var(--hero-h) * .094); }
+#main .hero__copy { gap:calc(var(--hero-h) * .135); }
+#main .hero__copy .hero__actions { gap:calc(var(--hero-h) * .083); }
+#main .hero__copy .hero-wordmark[data-logo3d] { width:calc(var(--hero-h) * 1.2); max-width:100%; margin:0 auto; }
+#main .hero__visual .hero-logo[data-logo3d] { width:calc(var(--hero-h) * 1.18); max-width:100%; }
+#main .start-record { height:var(--hero-h); width:min(100%, calc(var(--hero-h) * 2.4)); }
+@media(max-width:640px) {
+  #main .hero__visual .hero-logo[data-logo3d] { max-width:100%; }
+  #main .start-record { width:calc(100% + 24px); }
+}
+@media(min-width:900px) {
+  #main .hero__copy .hero-wordmark[data-logo3d] { width:calc(var(--hero-h) * 1.5); }
+}
+@media(min-width:1600px) and (min-height:950px) {
+  #main .hero__copy .hero-wordmark[data-logo3d] { width:calc(var(--hero-h) * 1.75); }
+}
+
+/* Narrow prices window: panels reflow at real size and the window grows; the page scroll moves through it. */
+#main>.crt:has(.window__body--flow) { height:auto; min-height:calc(100dvh - var(--taskbar-h) - 16px); }
+#main>.crt:has(.window__body--flow)>.window { height:auto; }
+#main .window__body--flow { flex:1 0 auto; overflow:visible; }
+#main .window__body--flow>section { position:static; top:auto; left:auto; width:auto; transform:none; }
+@media(max-width:760px) {
+  #prices .prices__grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #prices .prices__panel--qty { grid-column:1/-1; }
+  #prices .details-table { grid-template-columns:1fr 1fr; }
+  #prices .details-card .details-table .details-row--total { grid-column:1/-1; }
+}
+@media(max-width:480px) {
+  #prices .prices__grid { grid-template-columns:minmax(0,1fr); }
+  #prices .prices-preview-row { grid-template-columns:minmax(0,1fr); }
+  #prices .prices-preview-row > .record-preview { grid-column:1; grid-row:auto; justify-self:center; }
+  #prices .details-card__head { flex-wrap:wrap; }
+}
+/* Phone preview spans the column; the record scene scales with its width (1 unit = 1px of the desktop scene). */
+@media(max-width:480px) {
+  #prices .prices-preview-row > .record-preview,
+  #prices .prices-preview-row > .record-preview[data-sleeve] { width:100%; justify-self:stretch; container-type:inline-size; }
+  #prices .prices-preview-row .record-preview__stage { --u:.354cqw; min-height:calc(148 * var(--u)); }
+  #prices .prices-preview-row .record-preview .record-preview__disc { width:calc(128 * var(--u)); left:calc(50% - 64 * var(--u)); top:calc(8 * var(--u)); }
+  #prices .prices-preview-row .record-preview .record-preview__sleeve--normal { width:calc(128 * var(--u)); left:calc(50% - 96 * var(--u)); top:calc(8 * var(--u)); }
+  #prices .prices-preview-row .record-preview .record-preview__sleeve--gatefold { width:calc(230 * var(--u)); left:calc(50% - 127 * var(--u)); top:calc(22 * var(--u)); }
+  #prices .prices-preview-row > .record-preview[data-sleeve="printed"] .record-preview__disc { left:calc(50% - 32 * var(--u)); }
+  #prices .prices-preview-row > .record-preview[data-sleeve="gatefold"] .record-preview__disc { left:calc(50% - 1 * var(--u)); }
+}
+
+/* Settings gear at the right end of the taskbar, opening a small panel above it. */
+.taskbar .taskbar__settings {
+  display:flex; align-items:center; justify-content:center; width:34px; height:30px; padding:0; margin-left:8px; flex-shrink:0;
+  border:2px solid #000; border-radius:0; background:#d6d6d6; color:#141412; cursor:pointer;
+  box-shadow:inset 1px 1px #ffffffb3,inset -1px -1px #0002,2px 2px #141412;
+}
+.taskbar .taskbar__settings .icon { width:18px; height:18px; }
+.taskbar .taskbar__settings:hover { filter:brightness(1.06); }
+.taskbar .taskbar__settings[aria-expanded="true"],.taskbar .taskbar__settings:active {
+  background:#306230; color:#fff; filter:none; box-shadow:inset 2px 2px #0005,inset -1px -1px #fff;
+}
+.taskbar .taskbar__settings:active { transform:translate(1px,1px); }
+.taskbar .taskbar__settings:focus-visible { outline:2px dotted #141412; outline-offset:3px; }
+@media(max-width:640px) { .taskbar .taskbar__settings { margin-left:auto; } }
+
+.settings-panel {
+  position:fixed; right:10px; bottom:calc(var(--taskbar-h) + 10px); z-index:1002;
+  display:grid; gap:10px; padding:12px 14px; min-width:220px;
+  background:#f0f0f0; border:2px solid #000; box-shadow:inset 1px 1px #fff,4px 4px #000;
+  font:700 9px/1.4 "Press Start 2P","BLOB Pixel",Consolas,monospace; color:#141412;
+}
+.settings-panel[hidden] { display:none; }
+.settings-panel__row { display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.settings-panel__label { text-transform:uppercase; letter-spacing:.04em; }
+.settings-panel__group { display:flex; gap:6px; }
+.settings-panel__btn {
+  display:flex; align-items:center; gap:6px; height:28px; padding:0 8px; cursor:pointer;
+  border:2px solid #000; border-radius:0; background:#d6d6d6; color:#141412; font:inherit;
+  box-shadow:inset 1px 1px #ffffffb3,inset -1px -1px #0002,2px 2px #141412;
+}
+.settings-panel__btn:hover { filter:brightness(1.06); }
+.settings-panel__btn[aria-pressed="true"],.settings-panel__btn:active {
+  background:#306230; color:#fff; filter:none; box-shadow:inset 2px 2px #0005,inset -1px -1px #fff;
+}
+.settings-panel__btn:active { transform:translate(1px,1px); }
+.settings-panel__btn:focus-visible { outline:2px dotted #141412; outline-offset:3px; }
+.settings-panel .taskbar__flag { display:inline-block; width:14px; height:10px; border:1px solid #000; flex:none; }
+
+/* Themes (Settings > Theme). Dark keeps the site's print look with the ink inverted: dark paper, light
+   outlines and light hard shadows. invert(.92) on the surfaces is undone exactly by invert(1) contrast(1.19),
+   so logos, vinyl colors, the lime Start button and pressed greens keep their true colors. */
+:root { --record-paper:.95; --record-ink:.08; --true-color:invert(1) contrast(1.19); }
+:root[data-theme="dark"] { --record-paper:.08; --record-ink:.86; color-scheme:dark; }
+:root[data-theme="dark"] body { background:#141412; }
+:root[data-theme="dark"] .desktop { background-color:#306230; }
+:root[data-theme="dark"] #main>.crt { background:#2b2d27; border-color:#5a5d52 #0b0b0a #0b0b0a #5a5d52; }
+:root[data-theme="dark"] #main .window__body,
+:root[data-theme="dark"] .taskbar,
+:root[data-theme="dark"] .settings-panel,
+:root[data-theme="dark"] .start-panel { filter:invert(.92); }
+:root[data-theme="dark"] #main .window__body canvas,
+:root[data-theme="dark"] #main .hero-logo__img,
+:root[data-theme="dark"] .start-record__fallback,
+:root[data-theme="dark"] .chip[data-group="color"],
+:root[data-theme="dark"] .record-preview,
+:root[data-theme="dark"] .details-row--total,
+:root[data-theme="dark"] .taskbar__start,
+:root[data-theme="dark"] .taskbar__flag,
+:root[data-theme="dark"] .taskbar .taskbar__task--active,
+:root[data-theme="dark"] .taskbar .taskbar__task[aria-expanded="true"],
+:root[data-theme="dark"] .taskbar .taskbar__task:active,
+:root[data-theme="dark"] .taskbar #storyButton,
+:root[data-theme="dark"] .taskbar .taskbar__settings[aria-expanded="true"],
+:root[data-theme="dark"] .settings-panel__btn[aria-pressed="true"],
+:root[data-theme="dark"] .settings-panel__btn:active,
+:root[data-theme="dark"] .start-menu__item[href="#top"],
+:root[data-theme="dark"] .start-panel__titlebar { filter:var(--true-color); }
+/* Tinted panels: these light values invert to dark tints of the same hue. */
+:root[data-theme="dark"] .prices__panel--record,:root[data-theme="dark"] #main .form__section.form__section--light { background:#fbefe3; }
+:root[data-theme="dark"] .prices__panel--sleeve { background:#eff6e3; }
+:root[data-theme="dark"] .prices__panel--qty { background:#fde9f2; }
+:root[data-theme="dark"] .prices__panel--wide,:root[data-theme="dark"] #main .form__section.form__section--warm { background:#e5ecf8; }
+:root[data-theme="dark"] .settings-panel__btn[aria-pressed="true"] .taskbar__flag { filter:none; }
+:root[data-theme="dark"] #prices .details-card .details-table .details-row:first-child { background:#d1d9fb; }
+:root[data-theme="dark"] body::before { mix-blend-mode:screen; filter:invert(1); opacity:.6; }
+
+/* Start window: the four hero pieces spread evenly down the full window height (app.js sets min-height). */
+#main .hero { display:flex; flex-direction:column; padding:0; }
+#main .hero__inner { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:space-evenly; gap:0; padding-block:12px; }
+#main .hero__copy { display:contents; }
+#main .hero__copy .hero-wordmark[data-logo3d] { margin:0 auto; }
+#main .hero__copy .hero__actions { margin:0; }
+
+/* Titlebar arrows: step to the window above / below. Pixel arrows drawn with clip-path. */
+.window__btn--up::before,.window__btn--down::before { content:""; position:absolute; inset:0; margin:auto; width:14px; height:8px; background:#0f0f0f;
+  clip-path:polygon(6px 0,8px 0,8px 2px,10px 2px,10px 4px,12px 4px,12px 6px,14px 6px,14px 8px,0 8px,0 6px,2px 6px,2px 4px,4px 4px,4px 2px,6px 2px); }
+.window__btn--down::before { transform:scaleY(-1); }
+.window__btn:disabled { cursor:default; filter:none; }
+.window__btn:disabled::before { opacity:.3; }
+
+/* 3D price preview (preview3d.js): the canvas fills the stage and replaces the flat images. */
+#prices .record-preview__canvas { position:absolute; inset:0; width:100%; height:100%; display:block; z-index:4; }
+#prices .record-preview.is-3d img { visibility:hidden; }
+/* The preview floats free in the prices window: no frame, title bar or dotted backdrop. */
+#main #prices .prices-preview-row > .record-preview { padding:0; border:0; background:none; box-shadow:none; overflow:visible; }
+#main #prices .record-preview__bar { display:none; }
+#main #prices .record-preview__stage { border:0; background:none; overflow:visible; }
+/* .record-preview already undoes the dark-mode invert; don't undo it twice on its canvas. */
+:root[data-theme="dark"] #main #prices .record-preview__canvas { filter:none; }
+
+/* Start window fills the whole screen above the taskbar: no title bar, no frame, plain white. */
+.desktop { padding-top:0; }
+#main>#top.crt { margin:0 -8px 8px; width:auto; max-width:none; height:calc(100svh - var(--taskbar-h)); min-height:0; border:0; box-shadow:none; background:#fff; }
+#top .window { height:100%; border:0; box-shadow:none; background:#fff; }
+#top .window__titlebar { display:none; }
+#top .window__body { height:100%; background:#fff; background-image:none; }
+
+/* Taskbar: white, fixed at the bottom, one black line on top. Buttons match the start window buttons
+   (white face, black outline, hard black shadow; selected = solid black). High contrast keeps its own buttons. */
+.taskbar { background:#fff; border-top:2px solid #000; box-shadow:none; }
+/* Prices window: plain white like the start window. Each panel is one full-width row (label left, options right),
+   rows stacked and split by black lines, then the preview, then the final price. Chips use the taskbar button faces. */
+#prices .window__body { background:#fff; background-image:none; }
+#prices .prices__grid { display:flex; flex-direction:column; gap:0; border-top:2px solid #000; }
+#prices .prices-preview-row { display:contents; }
+#main #prices .prices__panel {
+  display:grid; grid-template-columns:200px minmax(0,1fr); align-items:center; gap:10px 16px;
+  padding:12px 0; border:0; border-bottom:1px solid #000; border-radius:0; background:none; box-shadow:none;
+}
+#main #prices .prices__panel > .panel-title,#main #prices .prices__chip-group-label { grid-column:1; margin:0; }
+#main #prices .prices__panel > .chips { grid-column:2; }
+#main #prices .prices__panel > p:not(.prices__chip-group-label) { grid-column:2; margin:0; }
+#main #prices .prices__panel > p:empty { display:none; }
+#main #prices .prices-preview-row > .record-preview { align-self:center; margin:14px 0; }
+#prices .prices__details { margin-top:0; border-top:2px solid #000; border-bottom:2px solid #000; }
+#main #prices .details-card { padding:12px 0; border:0; background:none; box-shadow:none; }
+#main #prices .details-card__head { margin:0 0 10px; padding:0; border:0; background:none; }
+#prices .details-badge { border:2px solid #000; background:#fff; }
+#prices .details-card .details-table .details-row { border:2px solid #000; background:#fff; }
+#prices .details-card .details-table .details-row:first-child { background:#fff; }
+#prices .details-card .details-table .details-row.details-row--total { background:var(--signal,#b8ff1a); border-color:#000; }
+#prices .hero__actions { margin-top:14px; }
+:root:not([data-contrast="on"]) #prices .chip:not([data-group="color"]) {
+  border:2px solid #0f0f0f; border-radius:0; background:#c0c0c0; color:#0f0f0f;
+  box-shadow:inset 2px 2px #fff,inset -2px -2px #777; transform:none; filter:none;
+}
+:root:not([data-contrast="on"]) #prices .chip:not([data-group="color"]):hover { background:#d4d4d4; transform:none; }
+:root:not([data-contrast="on"]) #prices .chip:not([data-group="color"]):is(.is-active,:active) {
+  background:#a8a8a8; color:#0f0f0f; box-shadow:inset 2px 2px #777,inset -2px -2px #fff;
+  text-decoration:underline; text-underline-offset:3px; transform:none;
+}
+/* Colour chips keep their own faces; only the bevel follows the taskbar. */
+:root:not([data-contrast="on"]) #prices #pricesColorPanel .chip { box-shadow:inset 2px 2px #fff8,inset -2px -2px #0006; border-color:#0f0f0f; }
+:root:not([data-contrast="on"]) #prices #pricesColorPanel .chip.is-active { box-shadow:inset 2px 2px #0008,inset -2px -2px #fff8; }
+@media(max-width:480px) {
+  #main #prices .prices__panel { grid-template-columns:minmax(0,1fr); gap:8px; }
+  #main #prices .prices__panel > * { grid-column:1 !important; }
+  #main #prices .prices-preview-row > .record-preview { align-self:stretch; }
+}
+
+/* Prices window fills the screen above the taskbar like the start window: no title bar or frame, plain white.
+   A black bar separates it from the start window. */
+#main>#top.crt { margin-bottom:0; }
+#main>#prices.crt { margin:-12px -8px 8px; width:auto; max-width:none; height:calc(100svh - var(--taskbar-h)); min-height:0;
+  border:0; border-top:8px solid #000; box-shadow:none; background:#fff; }
+#main>#prices.crt:has(.window__body--flow) { height:auto; min-height:calc(100svh - var(--taskbar-h)); }
+#prices .window { height:100%; border:0; box-shadow:none; background:#fff; }
+#prices .window__titlebar { display:none; }
+
+/* Compact prices rows: labels take only their own width; record and sleeve types share the first row. */
+#prices .prices__grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+#main #prices .prices__panel { grid-column:1/-1; grid-template-columns:max-content minmax(0,1fr); gap:8px 12px; padding:10px 0; }
+#main #prices .prices__panel--record { grid-column:1; padding-right:16px; }
+#main #prices .prices__panel--sleeve { grid-column:2; padding-left:16px; border-left:1px solid #000; align-content:center; }
+#main #prices .prices-preview-row > .record-preview { grid-column:1/-1; justify-self:center; margin:10px 0; }
+@media(max-width:640px) {
+  #main #prices .prices__panel--record,#main #prices .prices__panel--sleeve { grid-column:1/-1; padding-inline:0; border-left:0; }
+}
+@media(max-width:480px) {
+  #main #prices .prices-preview-row > .record-preview { justify-self:stretch; }
+}
+/* Half-width record/sleeve panels: label above the options so the chips get the full width. */
+#main #prices .prices__panel--record,#main #prices .prices__panel--sleeve { grid-template-columns:minmax(0,1fr); align-content:start; gap:6px; }
+#main #prices .prices__panel.prices__panel--record > *,#main #prices .prices__panel.prices__panel--sleeve > * { grid-column:1; }
+#main #prices .prices__panel--record > .prices__chip-group-label { margin-top:4px; }
+#main #prices .prices-preview-row > .record-preview { grid-row:auto; }
+@media(max-width:640px) {
+  #main #prices .prices__panel { grid-template-columns:minmax(0,1fr); }
+  #main #prices .prices__panel.prices__panel > * { grid-column:1; }
+}
+#main #prices .prices__panel.prices__panel--sleeve > p:not(.prices__chip-group-label),
+#main #prices .prices__panel.prices__panel--record > p:not(.prices__chip-group-label) { grid-column:1; }
+@media(max-width:640px) { #main #prices .prices__panel.prices__panel > p:not(.prices__chip-group-label) { grid-column:1; } }
+
+/* Prices layout: record and sleeve types stacked on the left with the preview beside them,
+   then colors, then number of copies, each full width. */
+#prices .prices__grid { grid-template-columns:minmax(0,1fr) max-content; }
+#main #prices .prices__panel.prices__panel--record { grid-column:1; grid-row:1; padding-right:16px; }
+#main #prices .prices__panel.prices__panel--sleeve { grid-column:1; grid-row:2; padding:10px 16px 10px 0; border-left:0; align-content:start; }
+#main #prices .prices-preview-row > .record-preview { grid-column:2; grid-row:1 / span 2; align-self:center; justify-self:center; margin:10px 0 10px 16px; }
+#main #prices .prices__panel.prices__panel--colors { grid-column:1/-1; grid-row:3; }
+#main #prices .prices__panel.prices__panel--qty { grid-column:1/-1; grid-row:4; }
+@media(max-width:640px) {
+  #prices .prices__grid { grid-template-columns:minmax(0,1fr); }
+  #main #prices .prices__panel.prices__panel--record,#main #prices .prices__panel.prices__panel--sleeve { grid-column:1; padding-inline:0; }
+  #main #prices .prices-preview-row > .record-preview { grid-column:1; grid-row:3; margin:10px 0; }
+  #main #prices .prices__panel.prices__panel--colors { grid-row:4; }
+  #main #prices .prices__panel.prices__panel--qty { grid-row:5; }
+}
+
+/* Section windows (prices, quote) fill the screen white like the start window. The black separator bar is drawn
+   in the gap above each window (outside it), so jumping to a window from a button shows only white. */
+#main>#prices.crt,#main>#quote.crt { margin:-4px -8px 0; width:auto; max-width:none; height:calc(100svh - var(--taskbar-h)); min-height:0;
+  border:0; box-shadow:0 -8px #000; background:#fff; }
+#main>#prices.crt:has(.window__body--flow),#main>#quote.crt:has(.window__body--flow) { height:auto; min-height:calc(100svh - var(--taskbar-h)); }
+#quote .window { height:100%; border:0; box-shadow:none; background:#fff; }
+#quote .window__titlebar { display:none; }
+#quote .window__body { background:#fff; background-image:none; }
+/* Jump exactly to a window's top edge so the separator bar above it stays out of view. */
+html { scroll-padding-top:0; }
+
+/* Prices chips and taskbar buttons share the start window button look: white face, 2px black outline,
+   hard 2px black shadow; hover lifts a pixel, press sinks into the shadow, selected is solid black. */
+:root:not([data-contrast="on"]) :is(#prices .chip:not([data-group="color"]),.taskbar .taskbar__task,.taskbar .taskbar__settings,.taskbar .taskbar__start) {
+  border:2px solid #000; border-radius:0; background:#fff; color:#141412; text-decoration:none;
+  box-shadow:inset 1px 1px #fff,inset -1px -1px #c5c7bc,2px 2px #141412; transform:none;
+}
+:root:not([data-contrast="on"]) :is(#prices .chip:not([data-group="color"]),.taskbar .taskbar__task,.taskbar .taskbar__settings):hover { background:#eeefe8; color:#141412; }
+:root:not([data-contrast="on"]) :is(#prices .chip,.taskbar .taskbar__task,.taskbar .taskbar__settings,.taskbar .taskbar__start):hover { transform:translateY(-1px); }
+:root:not([data-contrast="on"]) :is(#prices .chip,.taskbar .taskbar__task,.taskbar .taskbar__settings,.taskbar .taskbar__start):active {
+  transform:translate(2px,2px); box-shadow:inset 1px 1px #0004;
+}
+:root:not([data-contrast="on"]) .taskbar #startButton#startButton { background:var(--signal); }
+:root:not([data-contrast="on"]) :is(#prices .chip:not([data-group="color"]).is-active,.taskbar .taskbar__task.taskbar__task--active,
+  .taskbar .taskbar__task[aria-expanded="true"],.taskbar .taskbar__settings[aria-expanded="true"]) {
+  background:#111; color:#fff; box-shadow:inset 1px 1px #62665a,inset -1px -1px #000,2px 2px #141412; text-decoration:none;
+}
+:root:not([data-contrast="on"]) .taskbar #startButton#startButton.is-active { box-shadow:inset 1px 1px #fff8,inset -1px -1px #0003,2px 2px #141412; }
+/* Colour chips keep their faces; outline and shadow follow the same button look, selected gets a thick ring. */
+:root:not([data-contrast="on"]) #prices #pricesColorPanel .chip { border:2px solid #000; border-radius:0; box-shadow:inset 1px 1px #fff8,inset -1px -1px #0003,2px 2px #141412; }
+:root:not([data-contrast="on"]) #prices #pricesColorPanel .chip.is-active { box-shadow:inset 0 0 0 2px #fff,2px 2px #141412; text-decoration:underline; text-underline-offset:3px; }
+
+/* Prices: no thin rules between option groups (the thick black lines stay). The preview gets its own column that
+   grows with the window, keeps one width for every sleeve, and its scene scales with that width. */
+#main #prices .prices__panel { border-bottom:0; }
+#prices .prices__grid { grid-template-columns:minmax(0,1fr) clamp(220px,38%,460px); column-gap:20px; }
+#main #prices .prices-preview-row > .record-preview,
+#main #prices .prices-preview-row > .record-preview[data-sleeve] {
+  width:100%; max-width:none; margin:8px 0; justify-self:stretch; container-type:inline-size;
+}
+#main #prices .prices-preview-row .record-preview__stage { --u:.354cqw; min-height:0; aspect-ratio:1.6; height:auto; }
+#main #prices .prices-preview-row .record-preview .record-preview__disc { width:calc(128 * var(--u)); left:calc(50% - 64 * var(--u)); top:calc(50% - 64 * var(--u)); }
+#main #prices .prices-preview-row .record-preview .record-preview__sleeve--normal { width:calc(128 * var(--u)); left:calc(50% - 96 * var(--u)); top:calc(50% - 64 * var(--u)); }
+#main #prices .prices-preview-row .record-preview .record-preview__sleeve--gatefold { width:calc(230 * var(--u)); left:calc(50% - 127 * var(--u)); top:calc(50% - 50 * var(--u)); }
+#main #prices .prices-preview-row > .record-preview[data-sleeve="printed"] .record-preview__disc { left:calc(50% - 32 * var(--u)); }
+#main #prices .prices-preview-row > .record-preview[data-sleeve="gatefold"] .record-preview__disc { left:calc(50% - 1 * var(--u)); }
+/* Wide windows: colours and copies share a row under the options. */
+@media(min-width:1200px) {
+  #prices .prices__grid { grid-template-columns:minmax(0,1fr) minmax(0,1fr) clamp(300px,34%,460px); }
+  #main #prices .prices__panel.prices__panel--record { grid-column:1; grid-row:1; }
+  #main #prices .prices__panel.prices__panel--sleeve { grid-column:2; grid-row:1; padding-right:16px; }
+  #main #prices .prices__panel.prices__panel--colors { grid-column:1/3; grid-row:2; }
+  #main #prices .prices__panel.prices__panel--qty { grid-column:1/3; grid-row:3; }
+  #main #prices .prices-preview-row > .record-preview { grid-column:3; grid-row:1 / span 3; align-self:center; margin:8px 0; }
+}
+/* Narrow windows: one column, preview centred under record and sleeve at a comfortable size. */
+@media(max-width:640px) {
+  #prices .prices__grid { grid-template-columns:minmax(0,1fr); }
+  #main #prices .prices-preview-row > .record-preview,
+  #main #prices .prices-preview-row > .record-preview[data-sleeve] { grid-column:1; width:min(100%,420px); justify-self:center; }
+}
+
+/* Start and prices join seamlessly: no gap or black bar between them (the bar above quote stays). */
+#main>#prices.crt { margin-top:-12px; box-shadow:none; }
+
+/* Quote form extras: poster / insert / sticker as checkboxes (any combination), mirrored by the prices chips. */
+.field--extras { margin:0; padding:0; border:0; min-width:0; }
+.field--extras .field__checks { display:flex; flex-wrap:wrap; gap:8px 16px; min-height:38px; align-items:center; }
+.field--extras .field__check { display:inline-flex; align-items:center; gap:6px; cursor:pointer; font:9px/1.5 var(--px); }
+.field--extras input[type="checkbox"] { width:16px; height:16px; margin:0; accent-color:#111; }
+
+/* Narrow taskbar: the task and extra buttons stay, icon-only at their natural square size. Buttons that
+   don't fit wrap onto a hidden second line instead of shrinking; they remain reachable from the start menu. */
+@media(max-width:640px) {
+  .taskbar { gap:6px; }
+  .taskbar .taskbar__tasks,.taskbar .taskbar__extras {
+    display:flex; flex-wrap:wrap; align-content:flex-start; gap:4px 6px; min-width:0;
+    height:34px; padding:2px 2px 0 0; margin:0; overflow:hidden; border:0; box-shadow:none;
+  }
+  .taskbar .taskbar__tasks { flex:none; }
+  .taskbar .taskbar__extras { flex:0 1000 auto; margin-left:auto; justify-content:flex-end; } /* extras give way first */
+  .taskbar .taskbar__tasks .taskbar__task,.taskbar .taskbar__extras .taskbar__task {
+    display:inline-flex; flex:none; width:30px; min-width:0; padding:0; justify-content:center;
+  }
+  .taskbar .taskbar__tasks .taskbar__task span,.taskbar .taskbar__extras .taskbar__task span { display:none; }
+  .taskbar .taskbar__settings { flex:none; margin-left:0; }
+}
+
+/* Desktop start menu: a compact menu above the Start button, like on phones. */
+@media(min-width:641px) {
+  .start-panel--menu { left:6px; right:auto; width:280px; top:auto !important; bottom:calc(var(--taskbar-h) + 8px) !important; }
+}
+
+/* Start menu and taskbar pop-ups (menu, Downloads, Infos, About us, Settings): plain black and white in the
+   site's button style. White panel, 2px black outline and hard shadow; white title bar split by a black line;
+   items and the close box are white buttons with a black outline and 2px shadow; pressed or on = solid black. */
+:root:not([data-contrast="on"]) .start-panel,
+:root:not([data-contrast="on"]) .settings-panel {
+  background:#fff; border:2px solid #000; box-shadow:4px 4px #000; color:#141412;
+}
+:root:not([data-contrast="on"]) .start-panel .start-panel__titlebar {
+  background:#fff; color:#141412; border:0; border-bottom:2px solid #000; box-shadow:none;
+  min-height:36px; padding:6px 8px 6px 12px;
+}
+:root:not([data-contrast="on"]) .start-panel .start-panel__body { background:#fff; border:0; box-shadow:none; }
+:root:not([data-contrast="on"]) :is(.start-panel .start-panel__close,.start-menu .start-menu__item,.settings-panel .settings-panel__btn) {
+  border:2px solid #000; border-radius:0; background:#fff; color:#141412; filter:none; text-shadow:none;
+  box-shadow:inset 1px 1px #fff,inset -1px -1px #c5c7bc,2px 2px #141412; transform:none;
+}
+:root:not([data-contrast="on"]) .start-panel .start-panel__close { width:26px; height:24px; padding:0; display:grid; place-items:center; font:11px/1 var(--px); }
+:root:not([data-contrast="on"]) .start-menu .start-menu__item { justify-content:flex-start; gap:12px; }
+:root:not([data-contrast="on"]) :is(.start-panel .start-panel__close,.start-menu .start-menu__item,.settings-panel .settings-panel__btn):hover {
+  background:#eeefe8; color:#141412; transform:translateY(-1px);
+}
+:root:not([data-contrast="on"]) :is(.start-panel .start-panel__close,.start-menu .start-menu__item,.settings-panel .settings-panel__btn):active {
+  transform:translate(2px,2px); box-shadow:inset 1px 1px #0004;
+}
+:root:not([data-contrast="on"]) .settings-panel .settings-panel__btn[aria-pressed="true"] {
+  background:#111; color:#fff; box-shadow:inset 1px 1px #62665a,inset -1px -1px #000,2px 2px #141412;
+}
+:root:not([data-contrast="on"]) .settings-panel .settings-panel__row--toggles { border-top-color:#000; }
+/* Dark theme: these now invert with their panel instead of keeping their old light faces. */
+:root[data-theme="dark"] .start-panel__titlebar,
+:root[data-theme="dark"] .settings-panel__btn[aria-pressed="true"],
+:root[data-theme="dark"] .settings-panel__btn:active { filter:none; }
+:root[data-theme="dark"] .settings-panel__btn[aria-pressed="true"] .taskbar__flag { filter:var(--true-color); }
+
+/* Quote joins prices with no black bar between them. Its form groups are no longer panels: the fields sit on the
+   white window, and thin black lines separate project, pressing and contact. */
+#main>#quote.crt { margin-top:-12px; box-shadow:none; }
+#quote .form--quote { gap:0; }
+#main #quote .form--quote .form__section.form__section {
+  padding:18px 0; border:0; border-top:1px solid #000; border-radius:0; background:none; box-shadow:none;
+}
+#main #quote .form--quote .form__section.form__section:last-child { border-bottom:1px solid #000; }
+#quote .form__section > .panel-title { margin-bottom:14px; padding-bottom:0; border-bottom:0; }
+@media(max-width:640px) { #main #quote .form--quote .form__section.form__section { padding:16px 0; } }
+/* The menu's Start item keeps the lime of the taskbar Start button. */
+:root:not([data-contrast="on"]) .start-menu .start-menu__item[href="#top"],
+:root:not([data-contrast="on"]) .start-menu .start-menu__item[href="#top"]:hover { background:var(--signal); color:#141412; }
+
+/* Extras checkboxes in the site's button style: white face, 2px black outline, hard 2px shadow;
+   checked = solid black with a white pixel tick; press sinks into the shadow. */
+#quote .field--extras input[type="checkbox"] {
+  appearance:none; -webkit-appearance:none; flex:none; width:18px; height:18px; margin:0 2px 2px 0;
+  border:2px solid #000; border-radius:0; background:#fff; box-shadow:2px 2px #141412; cursor:pointer;
+  display:grid; place-items:center;
+}
+#quote .field--extras input[type="checkbox"]:hover { background:#eeefe8; }
+#quote .field--extras input[type="checkbox"]:active { transform:translate(2px,2px); box-shadow:none; }
+#quote .field--extras input[type="checkbox"]:checked { background:#111; }
+#quote .field--extras input[type="checkbox"]:checked::after {
+  content:""; width:4px; height:8px; margin-top:-2px; border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);
+}
+#quote .field--extras input[type="checkbox"]:focus-visible { outline:2px solid var(--signal,#b8ff1a); outline-offset:2px; }
+#quote .field--extras .field__check { gap:8px; }
+
+/* Quote colours: each group gets an accent from the site palette (lime, violet, orange). The group title is a
+   coloured tag in the button style, focused fields take a hard accent shadow, and Send is lime like Start. */
+#quote .form__section--light { --acc:var(--signal,#b8ff1a); --acc-ink:#141412; }
+#quote .form__section--muted { --acc:#7c3aed; --acc-ink:#fff; }
+#quote .form__section--warm { --acc:#ff5a36; --acc-ink:#141412; }
+#main #quote .form__section > .panel-title {
+  display:inline-flex; width:max-content; padding:5px 10px; border:2px solid #000; background:var(--acc); color:var(--acc-ink);
+  box-shadow:2px 2px #141412;
+}
+#quote .form__section > .panel-title .section-icon { color:currentColor; }
+#quote .form__section .field__input:focus { outline:none; border-color:#000; box-shadow:3px 3px var(--acc); }
+#quote .form__section .field--extras input[type="checkbox"]:checked { background:var(--acc); }
+#quote .form__section .field--extras input[type="checkbox"]:checked::after { border-color:var(--acc-ink); }
+:root:not([data-contrast="on"]) #quote .form__actions .button--primary {
+  background:var(--signal,#b8ff1a); color:#141412; border:2px solid #000; box-shadow:inset 1px 1px #fff8,inset -1px -1px #0003,2px 2px #141412;
+}
+:root:not([data-contrast="on"]) #quote .form__actions .button--primary:hover { background:#c7ff50; }
+/* Option rows hidden by the prices rules (discs for one copy, speed for 7"). */
+#prices .chips.is-hidden { display:none; }
+/* Prices: only the record and sleeve titles keep a label; weight, discs, speed and extras rows are just buttons. */
+#prices #pricesWeightLabel,#prices #pricesDiscsLabel,#prices #pricesRpmLabel,#prices #pricesExtrasLabel { display:none; }
+/* Colours and copies: title above the buttons at every width, like record and sleeve type. */
+#main #prices .prices__panel.prices__panel--colors,#main #prices .prices__panel.prices__panel--qty {
+  grid-template-columns:minmax(0,1fr); align-items:start; gap:6px;
+}
+#main #prices .prices__panel.prices__panel--colors > *,#main #prices .prices__panel.prices__panel--qty > * { grid-column:1; }
+/* Unit price row in the site yellow (as the Splatter chip), dark text. */
+#main #prices .details-card .details-table .details-row:first-child { background:#facc15; color:#141412; }
+#main #prices .details-card .details-table .details-row:first-child .details-cell { color:#141412; }
+/* 3D preview: the canvas bleeds well past its stage so big scenes (gatefold, tilt on hover) are never clipped by
+   an invisible box edge. It ignores the pointer; the stage still drives the hover. */
+#main #prices .record-preview__stage { overflow:visible; }
+#main #prices .record-preview .record-preview__canvas { inset:auto; left:-35%; top:-45%; width:170%; height:190%; max-width:none; pointer-events:none; }
+#main #prices .window__body { overflow:visible; }
